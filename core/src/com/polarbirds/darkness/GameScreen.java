@@ -4,13 +4,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.bullet.Bullet;
 
 /**
- * Created by Jørgen on 04.03.2015.
+ * Created by Kristian Rekstad on 04.03.2015.
  */
-public class GameScreen implements Screen{
+public class GameScreen implements Screen {
 
     private DarknessGame game;
 
-    public GameScreen(DarknessGame game){
+    public GameScreen(DarknessGame game) {
         this.game = game;
         Bullet.init(false, true);
     }
