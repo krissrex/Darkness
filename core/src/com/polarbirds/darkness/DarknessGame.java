@@ -6,8 +6,11 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.polarbirds.darkness.asset.Assets;
 import com.polarbirds.darkness.screen.GameScreen;
+import com.polarbirds.darkness.screen.LoadingScreen;
 
 public class DarknessGame extends Game {
     public SpriteBatch spriteBatch;
@@ -16,18 +19,20 @@ public class DarknessGame extends Game {
 
     Texture img;
 
-    GameScreen gameScreen;
+    public GameScreen gameScreen;
+    public LoadingScreen loadingScreen;
 
     @Override
     public void create() {
         spriteBatch = new SpriteBatch();
         modelBatch = new ModelBatch();
 
-        img = new Texture("badlogic.jpg");
+        img = new Texture(Assets.texture.badlogic);
 
+        loadingScreen = new LoadingScreen(this);
         gameScreen = new GameScreen(this);
 
-        setScreen(gameScreen);
+        setScreen(loadingScreen);
     }
 
     @Override
@@ -46,8 +51,14 @@ public class DarknessGame extends Game {
         super.dispose();
         spriteBatch.dispose();
         modelBatch.dispose();
-
+        loadingScreen.dispose();
+        gameScreen.dispose();
     }
 
+
+    private void queueAssets(){
+        ASSET_MANAGER.load(Assets.model.player, Model.class);
+        ASSET_MANAGER.load(Assets.model.debugEnemy, Model.class);
+    }
 
 }
