@@ -52,9 +52,10 @@ public class GameWorld implements Disposable{
         debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
         collisionWorld.setDebugDrawer(debugDrawer);
 
-        playerCamera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        playerCamera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         playerCamera.translate(0, 2f, 10f); //Fixme
-        playerCamera.far = 300f;
+        playerCamera.near = 0.1f;
+        playerCamera.far = 20f;
         playerCamera.lookAt(0,0,0);
         playerCamera.update();
         playerObject = new PlayerObject(this, playerCamera);
@@ -63,7 +64,8 @@ public class GameWorld implements Disposable{
 
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new PointLight().set(Color.RED, Vector3.Y, 1.0f));
+        environment.set(new ColorAttribute(ColorAttribute.Fog, 0.13f, 0.13f, 0.13f, 1f));
+        environment.add(new PointLight().set(Color.WHITE, new Vector3(0f, 1f, 1f), 2.0f));
     }
 
 
