@@ -1,8 +1,13 @@
 package com.polarbirds.darkness;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
@@ -15,18 +20,23 @@ import com.polarbirds.darkness.screen.GameScreen;
  */
 public class GameWorld implements Disposable{
 
+    // Rendering
     GameScreen game;
     ModelBatch modelBatch;
 
+    PerspectiveCamera playerCamera;
+    public Environment environment;
+
+    // Collision
     btCollisionWorld collisionWorld;
     DebugDrawer debugDrawer;
     btCollisionDispatcher dispatcher;
     btCollisionConfiguration collisionConfiguration;
     btDbvtBroadphase broadphase;
 
-    PerspectiveCamera playerCamera;
-
+    // Entities
     PlayerObject playerObject;
+
 
 
     public GameWorld(GameScreen game){
@@ -43,17 +53,24 @@ public class GameWorld implements Disposable{
         collisionWorld.setDebugDrawer(debugDrawer);
 
         playerCamera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        playerCamera.translate(5, 1, 0);
-        playerObject = new PlayerObject(playerCamera);
+        playerCamera.translate(0, 2f, 10f); //Fixme
+        playerCamera.far = 300f;
+        playerCamera.lookAt(0,0,0);
+        playerCamera.update();
+        playerObject = new PlayerObject(this, playerCamera);
 
         collisionWorld.addCollisionObject(playerObject.collisionObject);
+
+        environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new PointLight().set(Color.RED, Vector3.Y, 1.0f));
     }
 
 
     public void resize(int width, int height){
         playerCamera.viewportWidth = width;
         playerCamera.viewportHeight = height;
-        playerCamera.update();
+        playerCamera.update(true);
     }
 
     public void update(float deltaTime){
@@ -67,6 +84,7 @@ public class GameWorld implements Disposable{
 
 
         modelBatch.begin(playerCamera);
+        playerObject.render(modelBatch);
         modelBatch.end();
 
         debugDrawer.begin(playerCamera);
@@ -86,5 +104,11 @@ public class GameWorld implements Disposable{
         collisionConfiguration.dispose();
 
         playerObject.dispose();
+    }
+
+
+    /** Allows the environment to change. */
+    public Environment getPlayerEnvironment(){
+        return environment;
     }
 }

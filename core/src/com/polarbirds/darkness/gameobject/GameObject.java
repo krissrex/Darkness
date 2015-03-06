@@ -2,6 +2,7 @@ package com.polarbirds.darkness.gameobject;
 
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Disposable;
+import com.polarbirds.darkness.GameWorld;
 import com.polarbirds.darkness.graphics.RenderableObject;
 
 /**
@@ -12,10 +13,12 @@ public abstract class GameObject implements RenderableObject, Disposable{
     public int health;
     public float speed;
     public btCollisionObject collisionObject;
+    public GameWorld world;
 
-    public GameObject(){
+    public GameObject(GameWorld world){
         health = 100;
         speed = 5;
+        this.world = world;
     }
 
 

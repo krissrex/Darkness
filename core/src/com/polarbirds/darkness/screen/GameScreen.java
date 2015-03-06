@@ -15,13 +15,12 @@ public class GameScreen implements Screen {
 
     public GameScreen(DarknessGame game) {
         this.game = game;
-        Bullet.init(false, true);
-        world = new GameWorld(this);
+        //world = new GameWorld(this);
     }
 
     @Override
     public void show() {
-
+        if (world == null) world = new GameWorld(this);
     }
 
     @Override
@@ -53,6 +52,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        world.dispose();
+        if (world != null) {world.dispose(); world=null;}
     }
 }
