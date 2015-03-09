@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,11 @@ public class FPSCameraController extends InputAdapter {
     public float velocity = 5;
     public float degreesPerPixel = 0.5f;
 
+    protected float yAxisDegrees = 0;
+    protected float xAxisDegrees = 0;
+
+    protected float headBob = 0;
+
     protected final Vector3 tmp = new Vector3();
     protected final Quaternion yAxisRotation = new Quaternion();
     protected final Quaternion rightAxisRotation = new Quaternion();
@@ -37,19 +43,23 @@ public class FPSCameraController extends InputAdapter {
 
     public void update(float deltaTime){
         if (keys.containsKey(FORWARD)) {
-            tmp.set(camera.direction).nor().scl(deltaTime * velocity);
+            tmp.set(camera.direction).y=0;
+            tmp.nor().scl(deltaTime * velocity);
             camera.position.add(tmp);
         }
         if (keys.containsKey(BACKWARD)) {
-            tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
+            tmp.set(camera.direction).y=0;
+            tmp.nor().scl(-deltaTime * velocity);
             camera.position.add(tmp);
         }
         if (keys.containsKey(STRAFE_LEFT)) {
-            tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
+            tmp.set(camera.direction).crs(camera.up).y=0;
+            tmp.nor().scl(-deltaTime * velocity);
             camera.position.add(tmp);
         }
         if (keys.containsKey(STRAFE_RIGHT)) {
-            tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
+            tmp.set(camera.direction).crs(camera.up).y=0;
+            tmp.nor().scl(deltaTime * velocity);
             camera.position.add(tmp);
         }
         //camera.update(true);
@@ -78,36 +88,78 @@ public class FPSCameraController extends InputAdapter {
     }
 
 
-    Matrix4 mat = new Matrix4();
-    Matrix4 tmpMat = new Matrix4();
-
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         float dx = -Gdx.input.getDeltaX()*degreesPerPixel;
-        float dy = -Gdx.input.getDeltaY()*degreesPerPixel;
+        float dy = -Gdx.input.getDeltaY()*degreesPerPixel; // dy > 0 means drag up
 
+        /*xAxisDegrees += dy;
+        yAxisDegrees += dx;
 
-        //yAxisRotation.set(Vector3.Y, dx * degreesPerPixel).nor();
-        //tmp.set(camera.direction).crs(camera.up).nor();
+        xAxisDegrees = MathUtils.clamp(xAxisDegrees, -89f, 89f);
 
-        //rightAxisRotation.set(tmp, dy * degreesPerPixel).nor();
+        if (yAxisDegrees >= 360){
+            yAxisDegrees -= 360;
+        } else if (yAxisDegrees <= -360){
+            yAxisDegrees += 360;
+        }*/
 
-        //tmp.set(camera.position);
-        //camera.position.setZero();
+        strat1(dx, dy);
 
-        camera.direction.rotate(Vector3.Y, dx);
-        camera.up.rotate(Vector3.Y, dx);
-
-        tmp.set(camera.direction).crs(camera.up).nor();
-        camera.direction.rotate(tmp, dy);
-        camera.up.rotate(tmp, dy);
-        //camera.rotate(rightAxisRotation);
-        //camera.rotate(yAxisRotation);
-        //camera.translate(tmp);
-
-        tmp.set(camera.direction).crs(camera.up);
-        System.out.println("Right: "+tmp);
         return true;
+    }
+
+    private void strat1(float dx, float dy){
+        tmp.set(camera.direction).crs(camera.up).nor();
+
+        float currentY = camera.direction.y *90;
+        if (Math.abs(currentY+dy) > 89){
+            dy = Math.signum(currentY)*89-currentY;
+        }
+
+        camera.direction.rotate(tmp, dy).nor();
+        camera.up.rotate(tmp, dy).nor();
+
+        camera.direction.rotate(Vector3.Y, dx).nor();
+        camera.up.rotate(Vector3.Y, dx).nor();
+
+    }
+
+    private void strat2(float dx, float dy){
+        tmp.set(camera.direction).crs(Vector3.Y).y=0;
+
+        if (tmp.len2() <= 0.01f && (camera.direction.y>0 && dy>0) || (camera.direction.y<0 && dy<0)){
+            // parallell direction to up axis.
+            return;
+        }
+
+        tmp.nor(); // right axis
+
+        camera.direction.rotate(tmp, dy);
+        camera.direction.rotate(Vector3.Y, dx);
+
+        camera.up.set(camera.direction).crs(Vector3.Y).y=0;
+        camera.up.crs(camera.direction).nor();
+    }
+
+
+    private void strat3(){
+        // remember unit quaternions when rotating!!!!1!1! :pPpPP
+        // q = q2 * q1 , q1 followed by q2
+
+        /*
+        Reset mouse coordinates to center-of-screen on each frame, so that mouse never gets caught on the screen borders
+        Maintain the camera's "up" vector (disallow roll) and recompute the "sideways" vector
+        Disallow looking up past the vertical +y axis, or down past the -y axis (too far up/down)
+        Get the order of rotations correct (up/down first, then left/right)
+        Renormalize the "up", "aim", and "sideways" vectors each frame
+         */
+
+        // NOT FULLY IMPLEMENTED.
+        tmp.set(camera.direction).crs(camera.up);
+        rightAxisRotation.setEulerAngles(yAxisDegrees, xAxisDegrees, 0);
+        //camera.direction.rot
+        //camera.direction.rotate(tmp, )
     }
 
     @Override
