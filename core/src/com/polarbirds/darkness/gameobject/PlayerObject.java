@@ -26,8 +26,9 @@ public class PlayerObject extends GameObject {
     public PlayerObject(GameWorld world, PerspectiveCamera camera){
         super(world);
         this.camera = camera;
-        camera.position.set(0f, 1f, 0f);
-        camera.direction.set(0f, 0f, 1f);
+        //camera.position.set(0f, 1f, 0f);
+        //camera.direction.set(0f, 0f, -1f);
+
         transform = new Matrix4(new Vector3(0f, 1f, 0f), new Quaternion(), new Vector3(1f, 1f, 1f));
 
         collisionObject = new btCollisionObject();
@@ -36,7 +37,8 @@ public class PlayerObject extends GameObject {
         btCollisionShape collisionShape = new btBoxShape(new Vector3(0.5f, 1f, 0.5f));
         collisionObject.setCollisionShape(collisionShape);
 
-        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.weapon_teslaGun, Model.class));
+        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_T, Model.class));
+
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PlayerObject extends GameObject {
         //transform.rotate(Vector3.Y, 10*deltaTime);
         //camera.rotate(Vector3.Y, 10*deltaTime);
         transform.getTranslation(tempVec1);
-        camera.position.set(tempVec1);
+        //camera.position.set(tempVec1);
 
 
         //camera.rotateAround(Vector3.Y, Vector3.Y, 15*deltaTime);
