@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +23,7 @@ public class PlayerObject extends GameObject {
     PerspectiveCamera camera;
     Matrix4 transform;
     ModelInstance playerModel;
+    Renderable renderable;
 
     public PlayerObject(GameWorld world, PerspectiveCamera camera){
         super(world);
@@ -37,6 +39,7 @@ public class PlayerObject extends GameObject {
         collisionObject.setCollisionShape(collisionShape);
 
         playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.weapon_teslaGun, Model.class));
+
     }
 
     @Override

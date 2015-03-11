@@ -2,16 +2,16 @@ package com.polarbirds.darkness;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.polarbirds.darkness.asset.Assets;
+import com.polarbirds.darkness.graphics.Shaders;
 import com.polarbirds.darkness.screen.GameScreen;
 import com.polarbirds.darkness.screen.LoadingScreen;
 
@@ -26,10 +26,19 @@ public class DarknessGame extends Game {
     public GameScreen gameScreen;
     public LoadingScreen loadingScreen;
 
+
     @Override
     public void create() {
-        spriteBatch = new SpriteBatch();
+        Shaders.init();
+
+        if (!Shaders.normal_map.isCompiled()){
+            System.err.println("Shader failed to compile.");
+        }
+        ShaderProgram.pedantic = false;
+
+        spriteBatch = new SpriteBatch(1000, Shaders.normal_map);
         modelBatch = new ModelBatch();
+
 
         Bullet.init(false, true); // Init Bullet without refcount, and with logging
 
