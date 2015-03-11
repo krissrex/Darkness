@@ -32,6 +32,7 @@ public class FPSCameraController extends InputAdapter {
     protected float headBob = 0;
 
     protected final Vector3 tmp = new Vector3();
+    protected final Vector3 tmp2 = new Vector3();
     protected final Quaternion yAxisRotation = new Quaternion();
     protected final Quaternion rightAxisRotation = new Quaternion();
 
@@ -42,26 +43,29 @@ public class FPSCameraController extends InputAdapter {
     }
 
     public void update(float deltaTime){
+        tmp.set(0f,0f,0f);
         if (keys.containsKey(FORWARD)) {
-            tmp.set(camera.direction).y=0;
-            tmp.nor().scl(deltaTime * velocity);
-            camera.position.add(tmp);
+            tmp2.set(camera.direction).y=0;
+            tmp2.nor();
+            tmp.add(tmp2);
         }
         if (keys.containsKey(BACKWARD)) {
-            tmp.set(camera.direction).y=0;
-            tmp.nor().scl(-deltaTime * velocity);
-            camera.position.add(tmp);
+            tmp2.set(camera.direction).y=0;
+            tmp2.nor();
+            tmp.sub(tmp2);
         }
         if (keys.containsKey(STRAFE_LEFT)) {
-            tmp.set(camera.direction).crs(camera.up).y=0;
-            tmp.nor().scl(-deltaTime * velocity);
-            camera.position.add(tmp);
+            tmp2.set(camera.direction).crs(camera.up).y=0;
+            tmp2.nor();
+            tmp.sub(tmp2);
         }
         if (keys.containsKey(STRAFE_RIGHT)) {
-            tmp.set(camera.direction).crs(camera.up).y=0;
-            tmp.nor().scl(deltaTime * velocity);
-            camera.position.add(tmp);
+            tmp2.set(camera.direction).crs(camera.up).y=0;
+            tmp2.nor();
+            tmp.add(tmp2);
         }
+        tmp.nor().scl(deltaTime*velocity);
+        camera.position.add(tmp);
         //camera.update(true);
     }
 
