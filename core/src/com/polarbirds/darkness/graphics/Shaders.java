@@ -34,8 +34,8 @@ public class Shaders {
         default_shader.frag = readString("default_shader.frag");
         default_shader.default_shader = new ShaderProgram(default_shader.vert, default_shader.frag);
 
-        normal_map_shader.vert = readString("normal_map.vert");
-        normal_map_shader.frag = readString("normal_map.frag");
+        normal_map_shader.vert = readString("xoppa_uber.vert"); //readString("normal_map.vert");
+        normal_map_shader.frag = readString("xoppa_uber.frag"); //readString("normal_map.frag");
         normal_map_shader.normal_map = new ShaderProgram(normal_map_shader.vert, normal_map_shader.frag);
     }
 

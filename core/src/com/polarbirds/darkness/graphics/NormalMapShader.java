@@ -11,11 +11,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public class NormalMapShader extends DefaultShader {
 
     public NormalMapShader(Renderable renderable) {
-        super(renderable);
+        super(renderable); // , new Config(Shaders.normal_map_shader.getVert(), Shaders.normal_map_shader.getFrag()));
+
         this.program = new ShaderProgram(Shaders.normal_map_shader.getVert(), Shaders.normal_map_shader.getFrag());
     }
-
-
 
     @Override
     public boolean canRender(Renderable renderable) {
