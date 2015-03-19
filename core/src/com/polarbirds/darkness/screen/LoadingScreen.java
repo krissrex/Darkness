@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.polarbirds.darkness.DarknessGame;
 import com.polarbirds.darkness.Debug;
+import com.polarbirds.darkness.graphics.Shaders;
 
 /**
  * Created by Kristian Rekstad on 05.03.2015.
@@ -45,7 +46,7 @@ public class LoadingScreen implements Screen{
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()),game.spriteBatch);
 
-        Gdx.input.setInputProcessor(stage);
+        DarknessGame.INPUT_MULTIPLEXER.addProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -77,6 +78,8 @@ public class LoadingScreen implements Screen{
         }
 
     }
+
+    float time;
 
     @Override
     public void render(float delta) {
@@ -120,7 +123,12 @@ public class LoadingScreen implements Screen{
             stage.addAction(sequenceAction);
         }
 
+        time += (Gdx.graphics.getDeltaTime());
+
+        Shaders.default_shader.default_shader.begin();
+        Shaders.default_shader.default_shader.setUniformf("u_time", time);
         stage.draw();
+        Shaders.default_shader.default_shader.end();
     }
 
     @Override
@@ -140,6 +148,7 @@ public class LoadingScreen implements Screen{
 
     @Override
     public void hide() {
+        DarknessGame.INPUT_MULTIPLEXER.removeProcessor(stage);
         stage.dispose();
     }
 

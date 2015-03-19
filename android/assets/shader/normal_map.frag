@@ -1,30 +1,38 @@
 #version 150
 
-// gl_FragCoord: origin_upper_left,
-// pixel_center_integer.
-//  For in only (not with variable declarations):
-// early_fragment_tests
+#ifdef GL_ES
+#define LOWP lowp
+#define MED mediump
+#define HIGH highp
+precision mediump float;
+#else
+#define MED
+#define LOWP
+#define HIGH
+#endif
 
-/*
-Inputs:
- in vec4 gl_FragCoord;
- in bool gl_FrontFacing;
- in float gl_ClipDistance[];
- in vec2 gl_PointCoord;
- in int gl_PrimitiveID;
- in int gl_SampleID;
- in vec2 gl_SamplePosition;
-in int gl_SampleMaskIn[];
- in int gl_Layer;
-in int gl_ViewportIndex;
+// fog
+uniform vec4 u_fogColor;
+in float v_fog;
 
-Outputs
-out float gl_FragDepth;
-out int gl_SampleMask[];
-*/
+// light
+in vec3 v_lightDiffuse;
+in vec3 v_ambientLight;
+in vec3 v_lightSpecular;
 
-varying vec2 v_texCoord0;
+// texture
+uniform vec4 u_diffuseUVTransform;
+in MED vec2 v_diffuseUV;
+uniform sampler2D u_diffuseTexture;
+
+
+in vec2 v_texCoord0;
+
 
 void main() {
-    gl_FragColor = vec4(v_texCoord0, 0.0, 1.0);
+    vec4 diffuse = texture2D(u_diffuseTexture, v_diffuseUV);
+
+    gl_FragColor.rgb = (diffuse.rgb * (v_ambientLight + v_lightDiffuse));
+    gl_FragColor.rgb = mix(gl_FragColor.rgb, u_fogColor.rgb, v_fog);
+    gl_FragColor.a = 1.0;
 }
