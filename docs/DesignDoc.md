@@ -73,3 +73,13 @@ Weapons are steampunk and simple.
   * Walk sound
 * UI
   * Click sound
+
+## Suggested game flow
+<img src="image/game flow activity.png"/>
+
+## Suggested project timeline
+<p>
+<b>Release</b>: When HL3 is released  
+<b><a href="ProjectPlan.md">Project plan</a></b>: 27th March  
+<b>Completed game</b>: 22nd April 14:00
+</p>
