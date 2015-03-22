@@ -1,7 +1,9 @@
 # Darkness
 
 OOP game. get rekt.  
-Check out <a href="docs/DevNotes.md">Design Docs</a>.
+Check out these files:
+* <a href="docs/DesignDoc.md">Design document
+* <a href="docs/DevNotes.md">Notes for developers</a>.
 
 ### Coordinates:
 
