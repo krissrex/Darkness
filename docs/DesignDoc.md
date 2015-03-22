@@ -38,4 +38,38 @@ Weapons are steampunk and simple.
 
 
 ## Assets
-* 
+### Graphical
+* Weapons
+ * Tesla gun
+* Enemies
+* Map
+ * Maze pieces
+   * T-section ╠
+   * L-section ╔
+   * I-section ║
+   * X-section ╬
+   * End-section ╞
+ * Start room
+ * Boss room
+* GUI
+ * Main menu
+   * Background
+   * Button
+ * HUD
+   * Health
+
+### Audio
+* Main menu bg
+* Ingame ambience
+* Weapons
+  * Firing sound
+  * Charge sound
+* Enemies
+ * Attack sound
+ * Hurt sound
+ * Idle sound
+* Player
+  * Hurt sound
+  * Walk sound
+* UI
+  * Click sound
