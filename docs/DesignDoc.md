@@ -15,4 +15,27 @@ It is late at night, and dark outside. You are alone at NTNU. You found a tesla 
 
 In the catacombs, you find a dark maze filled with hostile creatures. Light is scarce, though your tesla gun may provide some bright flashes of light.
 
-Deep in the catacombs, you discover a secret. 
+Deep in the catacombs, you discover a secret. *insert epic boss fight here*
+
+
+## Artistic style
+Dark, grungy, dirty. It feels hostile, dark and dirty.
+The enemies are disgusting, with repulsive looks.
+Weapons are steampunk and simple.
+
+
+## Components
+| Type            | Chosen           |
+|-----------------|------------------|
+| 3D renderer     | LibGDX (OpenGL)  |
+| Load/Save       | None             |
+| AI              | State machine, without pathfinding  |
+| Physics         | LibGDX (Bullet)  |
+| UI system       | LibGDX (Stage2D) |
+| Particle system | Undecided        |
+| Sound           | LibGDX (OpenAL)  |
+| Input system    | LibGDX           |
+
+
+## Assets
+* 
