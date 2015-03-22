@@ -83,3 +83,12 @@ Weapons are steampunk and simple.
 <b><a href="ProjectPlan.md">Project plan</a></b>: 27th March  
 <b>Completed game</b>: 22nd April 14:00
 </p>
+
+
+## Additional ideas and possibilites
+### The boss
+It could be Gunnar Bovim, Christian Skau, or Hallvard Trætteberg.
+
+
+## Kudos
+Jason Bakker for his helpfull template on gamasutra.

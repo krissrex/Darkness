@@ -24,12 +24,15 @@ Det går an å lage Screens iterativt.
 
 
 ### Verktøy
-* IntelliJ IDEA
-* Atom text editor
-* Violet UML Editor
-* Git
-* GitHub (Privat prosjekt)
-
+| Navn              | Bruksområde   |
+|-------------------|---------------|
+| IntelliJ IDEA     | Programmering |
+| Atom text editor  | Tekst-editor  |
+| Violet UML Editor | UML           |
+| Git               | VCS           |
+| GitHub            | Backup / hosting / potensiel teamworking-plattform |
+| Blender           | 3D-modelering |
+| Paint.net         | 2D-grafikk; teksturering |
 
 ### Bibliotek/avhengigheter
 * LibGDX
