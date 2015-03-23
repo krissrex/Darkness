@@ -10,10 +10,14 @@
 
 ## Map
 
-| Section       | Status |
-|---------------|--------|
-| T-section ╠   | :white_check_mark: |
+| Section       | Status                        |
+|---------------|-------------------------------|
+| T-section ╠   | :white_check_mark:            |
 | L-section ╔   | :negative_squared_cross_mark: |
-| I-section ║   | :x: |
-| X-section ╬   | :x: |
+| I-section ║   | :negative_squared_cross_mark: |
+| X-section ╬   | :negative_squared_cross_mark: |
 | End-section ╞ | :x: |
+| Boxx room     | :x: |
+
+### Todo
+L, I and x neeeds texturing.
