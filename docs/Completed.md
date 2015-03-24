@@ -12,12 +12,13 @@
 
 | Section       | Status                        |
 |---------------|-------------------------------|
-| T-section ╠   | :white_check_mark:            |
-| L-section ╔   | :negative_squared_cross_mark: |
-| I-section ║   | :negative_squared_cross_mark: |
-| X-section ╬   | :negative_squared_cross_mark: |
+| T-section ╠   | :white_check_mark:            | bi-tangent
+| L-section ╔   | :white_check_mark:            | bi-tangent
+| I-section ║   | :white_check_mark:            | bi-tangent
+| X-section ╬   | :white_check_mark: | bi-tangent
+| Room []       | :white_check_mark: | bi-tangent
 | End-section ╞ | :x: |
-| Boxx room     | :x: |
+| Boss room     | :x: |
 
 ### Todo
 L, I and x neeeds texturing.
