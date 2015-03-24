@@ -16,7 +16,7 @@ public class Assets {
         public static final String debugEnemy = "3d/enemies/testEnemy.g3db";
 
         //Map
-        public static final String map_T = "3d/map/Tunnel T x -y y.g3db";
+        public static final String map_T = "3d/map/T/Tunnel T x -y y.g3db";
     }
 
 }
