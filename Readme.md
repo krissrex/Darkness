@@ -20,7 +20,7 @@ Check out these files:
 V  Z
 ```
 
-Y up, -Z forward. Fagt.
+Y up, -Z forward.
 
 # Distance
 1 unit = 1 meter

@@ -2,15 +2,13 @@
 
 
 # Krav
-1. Fullskjerm grafikk
+1. Fullskjerm grafikk / resizable
 2. 3D
 3. Kontrollerbar med shift, WASD, og mus.
 4. Skal ha lyd
-5. Skal ikke kræsje ofte (derp)
+5. Skal ikke kræsje ofte
 6. Trenger ikke å lagre til fil
 7. Mellom 30 og 60 frames per second
-8. Spooky scary skeletons
-  1. Thanks Mr. Skeltal
 
 
 # Utviklingsmetode
@@ -19,7 +17,7 @@ Planlegger først et oppsett i UML, og lager derfra trærne med klasser fra topp
 Det går an å lage Screens iterativt.
 
 1. Starter med loading screen
-2. Lager så Main menu
+2. Lager så Main menu screen
 3. Deretter selve spillet
 
 
@@ -30,9 +28,10 @@ Det går an å lage Screens iterativt.
 | Atom text editor  | Tekst-editor  |
 | Violet UML Editor | UML           |
 | Git               | VCS           |
-| GitHub            | Backup / hosting / potensiel teamworking-plattform |
+| GitHub            | Backup / VCS hosting / potensiel teamworking-platform |
 | Blender           | 3D-modelering |
 | Paint.net         | 2D-grafikk; teksturering |
+| fbx-conv          | fbx til g3db-konverterer |
 
 ### Bibliotek/avhengigheter
 * LibGDX
@@ -40,3 +39,5 @@ Det går an å lage Screens iterativt.
   * OpenGL
   * LWJGL
   * OpenAL
+  * Bullet
+  * Freetype
