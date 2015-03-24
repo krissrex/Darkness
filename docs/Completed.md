@@ -12,13 +12,13 @@
 
 | Section       | Status                        |
 |---------------|-------------------------------|
-| T-section ╠   | :white_check_mark:            | bi-tangent
-| L-section ╔   | :white_check_mark:            | bi-tangent
-| I-section ║   | :white_check_mark:            | bi-tangent
-| X-section ╬   | :white_check_mark: | bi-tangent
-| Room []       | :white_check_mark: | bi-tangent
+| T-section ╠   | :white_check_mark:            |
+| L-section ╔   | :white_check_mark:            |
+| I-section ║   | :white_check_mark:            |
+| X-section ╬   | :white_check_mark: |
 | End-section ╞ | :x: |
+| Room []       | :white_check_mark: |
 | Boss room     | :x: |
 
 ### Todo
-L, I and x neeeds texturing.
+- Remake weapon model to something cooler
