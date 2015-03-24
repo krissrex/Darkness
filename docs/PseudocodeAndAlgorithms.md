@@ -19,6 +19,7 @@ This is a place to collect small snippets and ideas of how certain algoritms sho
 | Type | Value |
 |------|-------|
 | Piece size | 10 x 10 x 2.5 |
+| Center | (0, 0, 0) local space |
 
 
 ### Algoritm overview
