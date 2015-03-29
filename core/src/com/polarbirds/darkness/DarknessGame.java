@@ -7,7 +7,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.polarbirds.darkness.asset.Assets;
@@ -71,9 +70,7 @@ public class DarknessGame extends Game {
 
 
     private void queueAssets(){
-        ASSET_MANAGER.load(Assets.model.weapon_teslaGun, Model.class);
-        ASSET_MANAGER.load(Assets.model.debugEnemy, Model.class);
-        ASSET_MANAGER.load(Assets.model.map_T, Model.class);
+        Assets.model.loadAll(ASSET_MANAGER);
     }
 
 }
