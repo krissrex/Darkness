@@ -2,8 +2,9 @@ package com.polarbirds.darkness.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.polarbirds.darkness.DarknessGame;
 import com.polarbirds.darkness.GameWorld;
 import com.polarbirds.darkness.input.FPSCameraController;
@@ -17,6 +18,7 @@ public class GameScreen implements Screen {
     GameWorld world;
     public FPSCameraController cameraController; //FirstPersonCameraController cameraController;
     public PerspectiveCamera playerCamera;
+    private ShapeRenderer shapeRenderer;
 
 
     public GameScreen(DarknessGame game) {
@@ -36,6 +38,7 @@ public class GameScreen implements Screen {
         cameraController = new FPSCameraController(playerCamera); //new FirstPersonCameraController(playerCamera);
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(cameraController);
 
+        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -43,8 +46,15 @@ public class GameScreen implements Screen {
         cameraController.update(delta);
         world.update(delta);
 
-        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
         world.render();
+
+
+        shapeRenderer.setProjectionMatrix(playerCamera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.line(-100f, 0, 0, 100, 0, 0, Color.RED, Color.PINK);
+            shapeRenderer.line(0f, -100f, 0, 0f, 100f, 0, Color.GREEN, Color.YELLOW);
+            shapeRenderer.line(0f, 0f, -100f, 0f, 0f, 100f, Color.BLUE, Color.CYAN);
+        shapeRenderer.end();
     }
 
     @Override
