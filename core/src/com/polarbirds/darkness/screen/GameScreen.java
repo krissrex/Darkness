@@ -51,9 +51,9 @@ public class GameScreen implements Screen {
 
         shapeRenderer.setProjectionMatrix(playerCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.line(-100f, 0, 0, 100, 0, 0, Color.RED, Color.PINK);
-            shapeRenderer.line(0f, -100f, 0, 0f, 100f, 0, Color.GREEN, Color.YELLOW);
-            shapeRenderer.line(0f, 0f, -100f, 0f, 0f, 100f, Color.BLUE, Color.CYAN);
+            shapeRenderer.line(0f, 0, 0, 100, 0, 0, Color.RED, Color.RED);
+            shapeRenderer.line(0f, 0f, 0, 0f, 100f, 0, Color.GREEN, Color.GREEN);
+            shapeRenderer.line(0f, 0f, 0f, 0f, 0f, 100f, Color.BLUE, Color.BLUE);
         shapeRenderer.end();
     }
 
