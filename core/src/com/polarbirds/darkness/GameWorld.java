@@ -2,6 +2,7 @@ package com.polarbirds.darkness;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -29,6 +30,7 @@ public class GameWorld implements Disposable{
     public PerspectiveCamera playerCamera;
 
     private OrthographicCamera overviewCamera;
+    private int overviewX, overviewY, overviewSize;
 
     // Collision
     btCollisionWorld collisionWorld;
@@ -48,6 +50,13 @@ public class GameWorld implements Disposable{
         this.playerCamera = game.playerCamera;
 
         overviewCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        overviewCamera.direction.set(0, -1f, 0);
+        overviewCamera.up.set(0, 0, 1f);
+        overviewCamera.position.set(0, 3f, 0);
+        overviewCamera.viewportWidth = 100;
+        overviewCamera.viewportHeight = 100;
+        overviewCamera.update();
+
 
         collisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfiguration);
@@ -69,16 +78,29 @@ public class GameWorld implements Disposable{
         environment.add(new PointLight().set(Color.WHITE, new Vector3(0f, 1f, 1f), 2.0f));
     }
 
+    private void setOverviewPosition(){
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
 
-    public void resize(int width, int height){
+        if (width > 500 && height > 500){
+            overviewSize = 100;
+        } else {
+            overviewSize = (int)(Math.min(width, height) * 0.2f);
+        }
+        overviewX = width-overviewSize-10;
+        overviewY = (int)(height*0.95f)-overviewSize;
     }
 
-    public void update(float deltaTime){
+
+    public void resize(int width, int height){
+        setOverviewPosition();
+    }
+
+    public void update(float deltaTime) {
         playerObject.update(deltaTime);
         collisionWorld.performDiscreteCollisionDetection();
 
         playerCamera.update(true);
-        overviewCamera.update();
     }
 
     public void render(){
@@ -91,6 +113,14 @@ public class GameWorld implements Disposable{
         collisionWorld.debugDrawWorld();
         debugDrawer.end();
 
+
+        Gdx.gl.glViewport(overviewX, overviewY, overviewSize, overviewSize);
+        //Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+        modelBatch.begin(overviewCamera);
+        playerObject.render(modelBatch);
+        modelBatch.end();
+        Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
     }
 
     @Override
