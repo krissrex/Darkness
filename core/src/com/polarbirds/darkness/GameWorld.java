@@ -1,6 +1,7 @@
 package com.polarbirds.darkness;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
@@ -55,6 +58,7 @@ public class GameWorld implements Disposable{
         overviewCamera.position.set(0, 3f, 0);
         overviewCamera.viewportWidth = 100;
         overviewCamera.viewportHeight = 100;
+        overviewCamera.zoom = 0.3f;
         overviewCamera.update();
 
 
@@ -101,6 +105,48 @@ public class GameWorld implements Disposable{
         collisionWorld.performDiscreteCollisionDetection();
 
         playerCamera.update(true);
+
+        updateMapCamera();
+    }
+
+
+    float oldOrthoX;
+    float oldOrthoZ;
+    private void updateMapCamera(){
+        boolean dirty = false;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)){
+            dirty |= zoomMap(-0.1f);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.K)){
+            dirty |= zoomMap(0.1f);
+        }
+
+        if (playerCamera.position.x != overviewCamera.position.x
+                || playerCamera.position.z != overviewCamera.position.z){
+            overviewCamera.position.x = playerCamera.position.x;
+            overviewCamera.position.z = playerCamera.position.z;
+            dirty = true;
+        }
+
+        if (oldOrthoX != playerCamera.direction.x || oldOrthoZ != playerCamera.direction.z){
+            oldOrthoX = playerCamera.direction.x;
+            oldOrthoZ = playerCamera.direction.z;
+            overviewCamera.up.set(oldOrthoX, 0f, oldOrthoZ);
+            overviewCamera.up.nor();
+            dirty = true;
+        }
+
+        if (dirty){
+            overviewCamera.update();
+        }
+
+    }
+
+    private boolean zoomMap(float delta){
+        float prev = overviewCamera.zoom;
+        overviewCamera.zoom += delta;
+        overviewCamera.zoom = MathUtils.clamp(overviewCamera.zoom, 0.1f, 1f);
+        System.out.println("Zoom " + overviewCamera.zoom);
+        return prev != overviewCamera.zoom;
     }
 
     public void render(){
@@ -115,9 +161,11 @@ public class GameWorld implements Disposable{
 
 
         Gdx.gl.glViewport(overviewX, overviewY, overviewSize, overviewSize);
+
         //Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
         modelBatch.begin(overviewCamera);
         playerObject.render(modelBatch);
+
         modelBatch.end();
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
