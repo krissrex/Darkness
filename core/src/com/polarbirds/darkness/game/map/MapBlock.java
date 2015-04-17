@@ -17,7 +17,7 @@ public class MapBlock {
     }
 
     /**
-     * Rotation around the up axis.
+     * Rotation around the up axis in degrees.
      */
     public float rotation;
 
