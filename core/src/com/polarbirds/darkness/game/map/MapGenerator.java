@@ -15,7 +15,7 @@ public class MapGenerator {
 
     private MapGeneratorStrategy mStrategy;
     private int mSize;
-    private List<MapBlock> mGenerated;
+    private GenerationResult mGenerated;
 
 
     private static class Neighbors{
@@ -24,6 +24,20 @@ public class MapGenerator {
         boolean neighbors[] = {false, false, false, false};
     }
 
+    public static class GenerationResult{
+        public final List<MapBlock> blocks;
+        public final IntPoint2 startPoint;
+        public final IntPoint2 endPoint;
+        public final int startIndex, endIndex;
+
+        public GenerationResult(List<MapBlock> blocks, IntPoint2 startPoint, IntPoint2 endPoint, int startIndex, int endIndex) {
+            this.blocks = blocks;
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+        }
+    }
 
 
     /**
@@ -41,13 +55,14 @@ public class MapGenerator {
      */
     public MapGenerator(MapGeneratorStrategy strategy, int size){
         mStrategy = strategy;
+        mSize = size;
     }
 
     /**
      * Must not be run before generating the blocks.
      * @see MapGenerator#generate()
      */
-    public List<MapBlock> getMapBlocks(){
+    public GenerationResult getMapBlocks(){
         if (mGenerated == null){
             throw new IllegalStateException("Function MapGenerator#generate() must be run first!");
         }
@@ -64,14 +79,19 @@ public class MapGenerator {
         Grid<Boolean> boolGrid = mStrategy.generateGrid(mSize);
         GridUtil<Boolean> gridUtil = new GridUtil<>(boolGrid);
 
+        IntPoint2 startPosition = new IntPoint2();
+        IntPoint2 endPosition = new IntPoint2();
+        int startIndex = 0, endIndex = 0;
+
         Grid<Boolean>.GridIterator iterator = boolGrid.new GridIterator();
         while (iterator.hasNext()){
+
+            IntPoint2 position = iterator.getCurrentPosition();
             Boolean cell = iterator.next();
             if (cell == null){
                 continue;
             }
 
-            IntPoint2 position = iterator.getCurrentPosition();
             if (cell.booleanValue()){
                 // Cell contains room
                 Neighbors neighbors = countTrueNeighbors(gridUtil, position.x, position.y);
@@ -91,19 +111,21 @@ public class MapGenerator {
                         blockType = MapBlock.BlockType.CROSS;
                         break;
                 }
-                if (position.x == mStrategy.getStartPoint().x
-                        && position.y == mStrategy.getStartPoint().y){
+                if (position.x == mStrategy.getStartPoint().x && position.y == mStrategy.getStartPoint().y){
                     blockType = MapBlock.BlockType.ROOM;
-                } else if (position.x == mStrategy.getEndPoint().x
-                        && position.y == mStrategy.getEndPoint().y){
+                    startPosition = new IntPoint2(position.x, position.y);
+                    startIndex = generatedMapBlocks.size();
+                } else if (position.x == mStrategy.getEndPoint().x && position.y == mStrategy.getEndPoint().y){
                     blockType = MapBlock.BlockType.BIG_ROOM;
+                    endPosition = new IntPoint2(position.x, position.y);
+                    endIndex = generatedMapBlocks.size();
                 }
                 MapBlock block = new MapBlock(position.x, position.y, blockType);
                 generatedMapBlocks.add(block);
             }
         }
 
-        mGenerated = generatedMapBlocks;
+        mGenerated = new GenerationResult(generatedMapBlocks, startPosition, endPosition, startIndex, endIndex);
     }
 
 
@@ -129,8 +151,9 @@ public class MapGenerator {
         Neighbors neighbors = new Neighbors();
 
         for (int i = 0; i < positions.length; i++) {
-            Boolean cell = gridUtil.getNeighbor(x, y, GridUtil.Position.ABOVE);
-            if (cell != null && cell.booleanValue()){
+            Boolean cell = gridUtil.getNeighbor(x, y, positions[i]);
+            //Debug: System.out.println("Testing for x: "+x +"\ty: "+y+"\t"+positions[i]);
+            if (cell != null && cell){
                 neighborCount++;
                 neighbors.neighbors[i] = true;
                 /*Index depends on that MapGenerator.positions matches declaration
