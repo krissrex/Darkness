@@ -1,11 +1,15 @@
 package com.polarbirds.darkness.util.collection;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Kristian Rekstad on 17.04.2015.
+ * Created by Kristian Rekstad on 17.04.2015.<br/>
+ * The top left point is (0,0).<br/>
+ * The bottom right point is (size-1, size-1)
  */
 public class Grid<T> implements Iterable<T>{
 
@@ -20,7 +24,7 @@ public class Grid<T> implements Iterable<T>{
      * }
      * </pre>
      */
-    private class GridIterator implements Iterator<T>{
+    public class GridIterator implements Iterator<T>{
         private int row = 0, col = 0;
 
         @Override
@@ -28,6 +32,10 @@ public class Grid<T> implements Iterable<T>{
             return (row < mSize && col < mSize);
         }
 
+        /**
+         * May return {@code null} <br/>
+         * {@inheritDoc}
+         */
         @Override
         public T next() {
             T next = get(col, row);
@@ -38,12 +46,17 @@ public class Grid<T> implements Iterable<T>{
             }
             return next;
         }
+
+        public Vector2 getCurrentPosition(){
+            return new Vector2(col, row);
+        }
     }
 
 
 
     /**
-     * A list of rows. <br>
+     * A list of rows. <br/>
+     * The top left point is (0,0)<br/>
      * mGrid[y][x]
      * <pre>{@code
      * [ [x1, x2, ..., x3],
@@ -57,12 +70,20 @@ public class Grid<T> implements Iterable<T>{
     private int mSize;
 
 
+    /**
+     * Initializes a square grid of size {@code size} with {@code null}.
+     * @param size grid size
+     */
     public Grid(int size){
         mSize = size;
 
         mGrid = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            mGrid.add(new ArrayList<T>(size));
+            List<T> row = new ArrayList<>(size);
+            for (int j = 0; j < size; j++) {
+                row.add(null);
+            }
+            mGrid.add(row);
         }
     }
 
