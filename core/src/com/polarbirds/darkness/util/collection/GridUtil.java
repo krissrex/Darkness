@@ -20,7 +20,6 @@ public class GridUtil<T> {
      * @return neighbor, or null if position is invalid
      */
     public T getNeighbor(int x, int y, Position neighborPosition){
-        int size = mGrid.getSize();
         if (!validatePosition(x, y)){
             throw new IndexOutOfBoundsException("Invalid point ("+x+", "+y+") in grid of size "+mGrid.getSize());
         }
