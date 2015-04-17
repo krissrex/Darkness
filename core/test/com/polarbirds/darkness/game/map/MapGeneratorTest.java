@@ -14,10 +14,26 @@ public class MapGeneratorTest extends TestCase{
         generator.generate();
         MapGenerator.GenerationResult result = generator.getMapBlocks();
         assertEquals("Start room index should be 0", 0, result.startIndex);
-        assertEquals("End room index should be 114", 114, result.endIndex);
+        assertEquals("End room index should be 115", 115, result.endIndex);
         assertEquals("Start should be room", MapBlock.BlockType.ROOM.name(), result.blocks.get(result.startIndex).type.name());
         assertEquals("Start should be room", MapBlock.BlockType.BIG_ROOM.name(), result.blocks.get(result.endIndex).type.name());
 
+        char map[][] = new char[31][31];
+        for (int y = 0; y < 31; y++) {
+            for (int x = 0; x < 31; x++) {
+                map[y][x] = ' ';
+            }
+        }
+        for (MapBlock block : result.blocks){
+            map[(int)block.position.y][(int)block.position.x] = block.type.name().charAt(0);
+        }
+
+        for (int y = 0; y < 31; y++) {
+            for (int x = 0; x < 31; x++) {
+                System.out.print(map[y][x]);
+            }
+            System.out.print("\n");
+        }
     }
 
     private static class TestGeneratorStrat implements MapGeneratorStrategy {

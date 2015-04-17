@@ -47,6 +47,10 @@ public class Grid<T> implements Iterable<T>{
             return next;
         }
 
+        /** Note that calling {@link GridIterator#next()}
+         * changes the current position.
+         * @see GridIterator#next()
+         */
         public IntPoint2 getCurrentPosition(){
             return new IntPoint2(col, row);
         }

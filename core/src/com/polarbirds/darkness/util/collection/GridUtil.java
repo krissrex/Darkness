@@ -38,8 +38,11 @@ public class GridUtil<T> {
                 break;
             case RIGHT:
                 dx = 1;
+                break;
+            default:
+                break;
         }
-
+        //Debug: System.out.println("x:"+(x+dx)+"\ty:"+(y+dy)+"\t"+neighborPosition.name()+" "+validatePosition(x+dx, y+dy));
         if (validatePosition(x+dx, y+dy)){
             return mGrid.get(x+dx, y+dy);
         } else {
