@@ -1,6 +1,6 @@
 package com.polarbirds.darkness.util.collection;
 
-import com.badlogic.gdx.math.Vector2;
+import com.polarbirds.darkness.util.geom.IntPoint2;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,8 +47,8 @@ public class Grid<T> implements Iterable<T>{
             return next;
         }
 
-        public Vector2 getCurrentPosition(){
-            return new Vector2(col, row);
+        public IntPoint2 getCurrentPosition(){
+            return new IntPoint2(col, row);
         }
     }
 
