@@ -96,6 +96,10 @@ public class Grid<T> implements Iterable<T>{
         mGrid.get(y).set(x, element);
     }
 
+    public T get(IntPoint2 point){
+        return get(point.x, point.y);
+    }
+
     public T get(int x, int y){
         return mGrid.get(y).get(x);
     }
