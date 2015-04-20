@@ -2,9 +2,14 @@ package com.polarbirds.darkness.game.map.impl;
 
 import com.polarbirds.darkness.game.map.MapGeneratorStrategy;
 import com.polarbirds.darkness.util.collection.Grid;
+import com.polarbirds.darkness.util.collection.GridUtil;
 import com.polarbirds.darkness.util.geom.IntPoint2;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * Created by Kristian Rekstad on 17.04.2015.
@@ -80,9 +85,14 @@ public class LineDrawingMapGeneratorStrat implements MapGeneratorStrategy{
         IntPoint2 start = new IntPoint2();
         IntPoint2 stop = new IntPoint2();
 
+        List<IntPoint2> ends = new ArrayList<>(iterations); // stores all ends
+
         start.x = mRandom.nextInt(size);
+        mStart.x = start.x; // set start point
         stop.x = start.x;
         stop.y = excludingBoundedRandInt(size, start.y);
+        ends.add(new IntPoint2(stop.x, stop.y));
+
         //python mapgen.py line 62
         makePath(grid, start, stop);
 
@@ -95,34 +105,39 @@ public class LineDrawingMapGeneratorStrat implements MapGeneratorStrategy{
                 stop.y = excludingBoundedRandInt(size, start.y);
             }
             makePath(grid, start, stop);
+            ends.add(new IntPoint2(stop.x, stop.y));
         }
 
-        setStartAndEnd(grid, size);
+
+        final GridUtil<Boolean> util = new GridUtil<>(grid);
+
+        mStop = ends.stream()
+                .filter(new Predicate<IntPoint2>() {
+                    @Override
+                    public boolean test(IntPoint2 point) {
+                        Boolean left = util.getNeighbor(point, GridUtil.Position.LEFT);
+                        Boolean right = util.getNeighbor(point, GridUtil.Position.RIGHT);
+                        Boolean up = util.getNeighbor(point, GridUtil.Position.ABOVE);
+                        Boolean down = util.getNeighbor(point, GridUtil.Position.BELOW);
+
+                        left = left==null? false : left;
+                        right = right==null? false : right;
+                        up = up==null? false : up;
+                        down = down==null? false : down;
+
+                        return (left&&!right&&!up&&!down)||(!left&&right&&!up&&!down)||(!left&&!right&&up&&!down)||(!left&&!right&&!up&&down); // ok
+                    }
+                })
+                .max(new Comparator<IntPoint2>() {
+                    @Override
+                    public int compare(IntPoint2 o1, IntPoint2 o2) {
+                        if (o1.x > o2.x) return 1;
+                        if (o1.x == o2.x) return 0;
+                        return -1;
+                    }
+                }).get();
 
         return grid;
-    }
-
-    private void setStartAndEnd(Grid<Boolean> grid, int size){
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                Boolean cell = grid.get(x, y);
-                if (cell != null && cell){
-                    mStart.x = x;
-                    mStart.y = y;
-                    break;
-                }
-            }
-        }
-
-        for (int x = size-1; x >= 0; x--) {
-            for (int y = size-1; y >= 0; y--) {
-                Boolean cell = grid.get(x, y);
-                if (cell != null && cell){
-                    mStop.x = x;
-                    mStop.y = y;
-                }
-            }
-        }
     }
 
 

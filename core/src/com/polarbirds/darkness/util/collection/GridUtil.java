@@ -1,5 +1,7 @@
 package com.polarbirds.darkness.util.collection;
 
+import com.polarbirds.darkness.util.geom.IntPoint2;
+
 /**
  * Created by Kristian Rekstad on 17.04.2015.
  */
@@ -10,6 +12,15 @@ public class GridUtil<T> {
     private Grid<T> mGrid;
     public GridUtil(Grid<T> grid){
         mGrid = grid;
+    }
+
+    /**
+     * Uses the points from the point in {@link GridUtil#getNeighbor(int, int, Position)}
+     * @see GridUtil#getNeighbor(int, int, Position)
+     * @param point
+     */
+    public T getNeighbor(IntPoint2 point, Position neighborPosition){
+        return getNeighbor(point.x, point.y, neighborPosition);
     }
 
     /**

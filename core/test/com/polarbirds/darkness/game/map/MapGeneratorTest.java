@@ -1,5 +1,6 @@
 package com.polarbirds.darkness.game.map;
 
+import com.polarbirds.darkness.game.map.impl.LineDrawingMapGeneratorStrat;
 import com.polarbirds.darkness.util.collection.Grid;
 import com.polarbirds.darkness.util.geom.IntPoint2;
 import junit.framework.TestCase;
@@ -18,9 +19,13 @@ public class MapGeneratorTest extends TestCase{
         assertEquals("Start should be room", MapBlock.BlockType.ROOM.name(), result.blocks.get(result.startIndex).type.name());
         assertEquals("Start should be room", MapBlock.BlockType.BIG_ROOM.name(), result.blocks.get(result.endIndex).type.name());
 
-        char map[][] = new char[31][31];
-        for (int y = 0; y < 31; y++) {
-            for (int x = 0; x < 31; x++) {
+        printMap(result, 31);
+    }
+
+    private void printMap(MapGenerator.GenerationResult result, int size){
+        char map[][] = new char[size][size];
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
                 map[y][x] = ' ';
             }
         }
@@ -28,12 +33,20 @@ public class MapGeneratorTest extends TestCase{
             map[(int)block.position.y][(int)block.position.x] = block.type.name().charAt(0);
         }
 
-        for (int y = 0; y < 31; y++) {
-            for (int x = 0; x < 31; x++) {
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
                 System.out.print(map[y][x]);
             }
             System.out.print("\n");
         }
+    }
+
+    public void testStratImpl() throws Exception {
+        MapGeneratorStrategy strat = new LineDrawingMapGeneratorStrat(28);
+        MapGenerator generator = new MapGenerator(strat, 37);
+        generator.generate();
+
+        printMap(generator.getMapBlocks(), 37);
     }
 
     private static class TestGeneratorStrat implements MapGeneratorStrategy {

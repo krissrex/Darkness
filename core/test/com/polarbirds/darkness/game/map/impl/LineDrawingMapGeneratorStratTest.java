@@ -1,6 +1,7 @@
 package com.polarbirds.darkness.game.map.impl;
 
 import com.polarbirds.darkness.util.collection.Grid;
+import com.polarbirds.darkness.util.geom.IntPoint2;
 import junit.framework.TestCase;
 
 /**
@@ -45,25 +46,27 @@ public class LineDrawingMapGeneratorStratTest extends TestCase{
         assertEquals("Strat stop grid value should be true", true, grid.get(mStrat.getEndPoint()).booleanValue());
 
         System.out.println("Printing generated grid:\n");
-        printGrid(grid);
+        printGrid(grid, mStrat.getStartPoint(), mStrat.getEndPoint());
     }
 
     public void testDynamicIterations() throws Exception {
         mStrat.setIterations(0);
         System.out.println("Generating grid of size 10, iter 0");
-        printGrid(mStrat.generateGrid(10));
+        printGrid(mStrat.generateGrid(10), mStrat.getStartPoint(), mStrat.getEndPoint());
         mStrat.setIterations(-1);
         System.out.println("Generating grid of size 40, iter -1");
-        printGrid(mStrat.generateGrid(40));
+        printGrid(mStrat.generateGrid(40), mStrat.getStartPoint(), mStrat.getEndPoint());
         System.out.println("Generating grid of size 60, iter -1");
-        printGrid(mStrat.generateGrid(60));
+        printGrid(mStrat.generateGrid(60), mStrat.getStartPoint(), mStrat.getEndPoint());
 
     }
 
-    private void printGrid(Grid<Boolean> grid){
+    private void printGrid(Grid<Boolean> grid, IntPoint2 start, IntPoint2 end){
         for (int y = 0; y < grid.getSize(); y++) {
             for (int x = 0; x < grid.getSize(); x++) {
                 char val = grid.get(x, y)==null?' ' : (grid.get(x, y)? '1' : ' ');
+                if (x == start.x && y == start.y) val = 'S';
+                if (x == end.x && y == end.y) val = 'E';
                 System.out.print(val);
             }
             System.out.print("\n");
