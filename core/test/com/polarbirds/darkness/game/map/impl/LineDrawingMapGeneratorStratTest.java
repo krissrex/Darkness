@@ -43,20 +43,30 @@ public class LineDrawingMapGeneratorStratTest extends TestCase{
         assertNotNull("Strat end point not null", mStrat.getEndPoint());
         assertEquals("Strat start grid value should be true", true, grid.get(mStrat.getStartPoint()).booleanValue());
         assertEquals("Strat stop grid value should be true", true, grid.get(mStrat.getEndPoint()).booleanValue());
-        System.out.println("Printing generated grid:\n");
 
-        for (int y = 0; y < mSize; y++) {
-            for (int x = 0; x < mSize; x++) {
+        System.out.println("Printing generated grid:\n");
+        printGrid(grid);
+    }
+
+    public void testDynamicIterations() throws Exception {
+        mStrat.setIterations(0);
+        System.out.println("Generating grid of size 10, iter 0");
+        printGrid(mStrat.generateGrid(10));
+        mStrat.setIterations(-1);
+        System.out.println("Generating grid of size 40, iter -1");
+        printGrid(mStrat.generateGrid(40));
+        System.out.println("Generating grid of size 60, iter -1");
+        printGrid(mStrat.generateGrid(60));
+
+    }
+
+    private void printGrid(Grid<Boolean> grid){
+        for (int y = 0; y < grid.getSize(); y++) {
+            for (int x = 0; x < grid.getSize(); x++) {
                 char val = grid.get(x, y)==null?' ' : (grid.get(x, y)? '1' : ' ');
                 System.out.print(val);
             }
             System.out.print("\n");
         }
-    }
-
-    public void testDynamicIterations() throws Exception {
-        mStrat.setIterations(0);
-
-
     }
 }
