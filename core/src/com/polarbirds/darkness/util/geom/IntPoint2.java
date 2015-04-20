@@ -19,4 +19,12 @@ public class IntPoint2 {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "IntPoint2{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

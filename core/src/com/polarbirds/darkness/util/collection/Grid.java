@@ -112,4 +112,21 @@ public class Grid<T> implements Iterable<T>{
     public int getSize(){
         return mSize;
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        for (List<T> row : mGrid){
+            for (T cell : row){
+                if (cell == null){
+                    b.append(' ');
+                } else {
+                    b.append(cell);
+                }
+            }
+            b.append('\n');
+        }
+        return b.toString();
+    }
 }
