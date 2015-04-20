@@ -12,7 +12,7 @@ public interface MapGeneratorStrategy {
     public Grid<Boolean> generateGrid(int size);
 
     /**
-     * The start point is the topmost left point in the grid. Nothing can be above the point<br/>
+     * The start point is the leftmost top point in the grid. Nothing can be above the point<br/>
      * The {@code x} shows the valid point for start position in a 4*4 grid.
      * <pre>{@code
      * |x1oo|
@@ -24,7 +24,7 @@ public interface MapGeneratorStrategy {
     public IntPoint2 getStartPoint();
 
     /**
-     * The end point is the bottom rightmost point in the grid. Nothing can be to the right of the point<br/>
+     * The end point is the bottommost right point in the grid. Nothing can be to the right of the point<br/>
      * The {@code x} shows the valid point for end position in a 4*4 grid.
      * <pre>{@code
      * |11oo|
