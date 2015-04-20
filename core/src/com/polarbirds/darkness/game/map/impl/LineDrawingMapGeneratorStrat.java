@@ -94,6 +94,7 @@ public class LineDrawingMapGeneratorStrat implements MapGeneratorStrategy{
             } else {
                 stop.y = excludingBoundedRandInt(size, start.y);
             }
+            makePath(grid, start, stop);
         }
 
         setStartAndEnd(grid, size);
