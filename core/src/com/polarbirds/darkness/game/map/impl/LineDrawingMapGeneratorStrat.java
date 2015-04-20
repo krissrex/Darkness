@@ -32,13 +32,13 @@ public class LineDrawingMapGeneratorStrat implements MapGeneratorStrategy{
      */
     public LineDrawingMapGeneratorStrat(int iterations){
         mIterations = iterations;
-        mDynamicIterations = !(iterations<=0); // true if negative
+        mDynamicIterations = (iterations<=0); // true if negative
         mRandom = new Random();
     }
 
     public void setIterations(int iterations) {
         this.mIterations = iterations;
-        mDynamicIterations = !(iterations<=0);
+        mDynamicIterations = (iterations<=0);
     }
 
     public void setSeed(long seed){
