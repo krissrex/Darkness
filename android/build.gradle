@@ -13,6 +13,9 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 22
