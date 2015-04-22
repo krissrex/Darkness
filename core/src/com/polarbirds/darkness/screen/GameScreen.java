@@ -31,11 +31,10 @@ public class GameScreen implements Screen {
         playerCamera.translate(0, 1.8f, 0f); //Fixme
         playerCamera.near = 0.1f;
         playerCamera.far = 20f;
-        //playerCamera.lookAt(0,0,0);
         playerCamera.update(true);
 
         if (world == null) world = new GameWorld(this);
-        cameraController = new FPSCameraController(playerCamera); //new FirstPersonCameraController(playerCamera);
+        cameraController = new FPSCameraController(playerCamera);
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(cameraController);
 
         shapeRenderer = new ShapeRenderer();
@@ -48,7 +47,6 @@ public class GameScreen implements Screen {
         cameraController.update(delta);
 
         world.update(delta);
-
         world.render();
 
 
