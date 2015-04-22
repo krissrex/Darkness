@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.polarbirds.darkness.DarknessGame;
-import com.polarbirds.darkness.GameWorld;
+import com.polarbirds.darkness.game.GameWorld;
 import com.polarbirds.darkness.input.FPSCameraController;
 
 /**
@@ -41,9 +41,12 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
     }
 
+
+
     @Override
     public void render(float delta) {
         cameraController.update(delta);
+
         world.update(delta);
 
         world.render();
@@ -55,6 +58,7 @@ public class GameScreen implements Screen {
             shapeRenderer.line(0f, 0f, 0, 0f, 100f, 0, Color.GREEN, Color.GREEN);
             shapeRenderer.line(0f, 0f, 0f, 0f, 0f, 100f, Color.BLUE, Color.BLUE);
         shapeRenderer.end();
+
     }
 
     @Override
@@ -63,6 +67,7 @@ public class GameScreen implements Screen {
         playerCamera.viewportHeight = height;
         playerCamera.update(true);
 
+        cameraController.resized(width, height);
         world.resize(width, height);
     }
 
