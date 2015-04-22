@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Disposable;
+import com.polarbirds.darkness.Debug;
 import com.polarbirds.darkness.game.gameobject.PlayerObject;
 import com.polarbirds.darkness.game.map.GameMap;
 import com.polarbirds.darkness.game.map.Minimap;
@@ -85,6 +86,9 @@ public class GameWorld implements Disposable{
         IntPoint2 start = gameMap.getStart();
         playerCamera.position.x = start.x;
         playerCamera.position.z = start.y;
+        if (Debug.DEBUG){
+            System.out.println("Player pos: " +start);
+        }
         playerCamera.update();
     }
 
@@ -97,6 +101,7 @@ public class GameWorld implements Disposable{
 
     public void update(float deltaTime) {
         playerObject.update(deltaTime);
+
         collisionWorld.performDiscreteCollisionDetection();
 
         minimap.update(playerCamera.position, playerCamera.direction);
@@ -106,7 +111,7 @@ public class GameWorld implements Disposable{
 
         modelBatch.begin(playerCamera);
         for (ModelInstance model : gameMap.getModelInstances()){
-            modelBatch.render(model);
+            modelBatch.render(model); //Fixme: add environment
         }
         for (ModelInstance model : playerObject.getModelInstances()){
             modelBatch.render(model, environment);

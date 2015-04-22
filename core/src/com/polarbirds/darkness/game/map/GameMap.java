@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.polarbirds.darkness.DarknessGame;
+import com.polarbirds.darkness.Debug;
 import com.polarbirds.darkness.asset.Assets;
 import com.polarbirds.darkness.game.map.impl.LineDrawingMapGeneratorStrat;
 import com.polarbirds.darkness.graphics.ModelInstanceProvider;
@@ -59,11 +60,36 @@ public class GameMap implements ModelInstanceProvider {
 
     private void createInstances(){
         MapGenerator.GenerationResult result = mGenerator.getMapBlocks();
+
+        if (Debug.DEBUG){
+            char map[][] = new char[mSize][mSize];
+            for (int y = 0; y < mSize; y++) {
+                for (int x = 0; x < mSize; x++) {
+                    map[y][x] = ' ';
+                }
+            }
+            for (MapBlock block : result.blocks){
+                map[(int)block.position.y][(int)block.position.x] = block.type.name().charAt(0);
+            }
+
+            for (int y = 0; y < mSize; y++) {
+                for (int x = 0; x < mSize; x++) {
+                    System.out.print(map[y][x]);
+                }
+                System.out.print("\n");
+            }
+        }
+
+
         mModelInstances.clear();
         for (MapBlock block : result.blocks){
             ModelInstance instance = new ModelInstance(getModelFromType(block.type));
+            instance.transform.idt();
+            instance.transform.setToTranslation(block.position.x*10, 0f, block.position.y*10);
             instance.transform.rotate(Vector3.Y, block.rotation);
-            instance.transform.translate(block.position.x*10, 0, block.position.y*10);
+            if (Debug.DEBUG){
+                System.out.println("Instance for: "+ block.type.name()+ "\t"+block.position+"\t"+block.rotation);
+            }
             instance.calculateTransforms();
             mModelInstances.add(instance);
         }

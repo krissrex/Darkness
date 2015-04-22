@@ -17,7 +17,24 @@ public class MapBlock {
     }
 
     /**
-     * Rotation around the up axis in degrees.
+     * Counter clockwise rotation around the up axis in degrees. <br/>
+     * A rotation of 0 means looking from 0 toward positive X.
+     * <pre>{@code
+     * up     y
+     * |    /
+     * |  /
+     * |/_______ x
+     *
+     * y
+     * |
+     * |
+     * 0-->--- x  0 degrees
+     *
+     * y
+     * |  /  45 degrees
+     * |/
+     * 0------ x
+     * }</pre>
      */
     public float rotation;
 

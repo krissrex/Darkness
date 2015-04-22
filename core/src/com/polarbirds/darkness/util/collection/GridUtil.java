@@ -35,7 +35,8 @@ public class GridUtil<T> {
             throw new IndexOutOfBoundsException("Invalid point ("+x+", "+y+") in grid of size "+mGrid.getSize());
         }
 
-        int dx = 0, dy = 0;
+        int dx = 0;
+        int dy = 0;
 
         switch (neighborPosition){
             case ABOVE:

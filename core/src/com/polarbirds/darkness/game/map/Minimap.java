@@ -2,6 +2,7 @@ package com.polarbirds.darkness.game.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -90,6 +91,11 @@ public class Minimap {
     }
 
 
+    /**
+     * The batch should not have called {@link ModelBatch#begin(Camera)} already.
+     * @param batch
+     * @param mapRenderables the renderables that compose the map
+     */
     public void render(ModelBatch batch, List<ModelInstanceProvider> mapRenderables){
         Gdx.gl.glViewport(overviewX, overviewY, overviewSize, overviewSize);
         batch.begin(overviewCamera);

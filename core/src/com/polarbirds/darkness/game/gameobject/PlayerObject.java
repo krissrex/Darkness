@@ -29,7 +29,7 @@ public class PlayerObject extends GameObject {
         //camera.direction.set(0f, 0f, -1f);
 
         transform = new Matrix4(new Vector3(0f, 1f, 0f), new Quaternion(), new Vector3(1f, 1f, 1f));
-        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_I, Model.class));
+        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_room, Model.class));
         mModels.add(playerModel);
 
         collisionObject = new btCollisionObject();

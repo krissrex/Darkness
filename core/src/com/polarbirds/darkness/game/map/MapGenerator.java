@@ -111,6 +111,11 @@ public class MapGenerator {
                         blockType = MapBlock.BlockType.CROSS;
                         break;
                 }
+
+                float rotation = determineRotation(neighbors, blockType);
+
+                // Set the start and end rooms
+
                 if (position.x == mStrategy.getStartPoint().x && position.y == mStrategy.getStartPoint().y){
                     blockType = MapBlock.BlockType.ROOM;
                     startPosition = new IntPoint2(position.x, position.y);
@@ -120,7 +125,9 @@ public class MapGenerator {
                     endPosition = new IntPoint2(position.x, position.y);
                     endIndex = generatedMapBlocks.size();
                 }
-                MapBlock block = new MapBlock(position.x, position.y, blockType);
+
+                // Create the block and add it to the result
+                MapBlock block = new MapBlock(position.x, position.y, blockType, rotation);
                 generatedMapBlocks.add(block);
             }
         }
@@ -144,8 +151,43 @@ public class MapGenerator {
     }
 
 
+    private float determineRotation(Neighbors neighbors, MapBlock.BlockType type){
+        // Junction is?  on 0
+        // Corner is ? on o
+        // Cross is ? on 0
+        // Room is ?? on 0
+        // Big room should be equal to room
+        // Hall is | on 0
+        switch (type){
+            case HALL:
+                if (neighbors.neighbors[2]) return 90f;
+                break;
+            case BIG_ROOM:
+            case ROOM:
+                if (neighbors.neighbors[0]) return 90f;
+                if (neighbors.neighbors[1]) return 270f;
+                if (neighbors.neighbors[2]) return 180f;
+                break;
+            case CORNER:
+                if (neighbors.neighbors[0] && neighbors.neighbors[3]) return 90f;
+                if (neighbors.neighbors[0] && neighbors.neighbors[2]) return 180f;
+                if (neighbors.neighbors[2] && neighbors.neighbors[1]) return 270f;
+                break;
+            case JUNCTION:
+                if (neighbors.neighbors[0] && neighbors.neighbors[1] && neighbors.neighbors[2]) return 180f;
+                if (neighbors.neighbors[2] && neighbors.neighbors[3]){
+                    if (neighbors.neighbors[0]) return 90f;
+                    if (neighbors.neighbors[1]) return 270f;
+                }
+                break;
+        }
+
+        return 0f;
+    }
+
     private final GridUtil.Position positions[] = {GridUtil.Position.ABOVE, GridUtil.Position.BELOW,
             GridUtil.Position.LEFT, GridUtil.Position.RIGHT};
+
     private Neighbors countTrueNeighbors(GridUtil<Boolean> gridUtil, int x, int y){
         int neighborCount = 0;
         Neighbors neighbors = new Neighbors();
