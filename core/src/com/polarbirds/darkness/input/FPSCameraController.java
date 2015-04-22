@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
@@ -50,13 +48,15 @@ public class FPSCameraController extends InputAdapter {
 
     public void resized(int width, int height){
         cursorX = width/2;
-        cursorY = width/2;
+        cursorY = height/2;
     }
+
+    private int deltaX, deltaY;
 
     public void update(float deltaTime){
         if (cursorLock){
-            int deltaX = Gdx.input.getDeltaX();
-            int deltaY = Gdx.input.getDeltaY();
+            deltaX = Gdx.input.getDeltaX();
+            deltaY = Gdx.input.getDeltaY();
             Gdx.input.setCursorPosition(cursorX, cursorY);
             cameraMoved(deltaX, deltaY);
         }
@@ -82,9 +82,10 @@ public class FPSCameraController extends InputAdapter {
             tmp2.nor();
             tmp.add(tmp2);
         }
+
         tmp.nor().scl(deltaTime*velocity);
         camera.position.add(tmp);
-        //camera.update(true);
+        camera.update();
     }
 
     @Override
