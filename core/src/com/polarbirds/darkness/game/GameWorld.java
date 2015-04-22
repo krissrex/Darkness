@@ -1,6 +1,8 @@
 package com.polarbirds.darkness.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -35,6 +37,7 @@ public class GameWorld implements Disposable{
     public Environment environment;
     public PerspectiveCamera playerCamera;
     private Minimap minimap;
+    private PerspectiveCamera weaponCamera;
 
     // Collision
     btCollisionWorld collisionWorld;
@@ -54,6 +57,12 @@ public class GameWorld implements Disposable{
         this.game = game;
         modelBatch = game.game.modelBatch;
         this.playerCamera = game.playerCamera;
+
+        weaponCamera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        weaponCamera.near = 0.001f;
+        weaponCamera.far = 10f;
+        weaponCamera.lookAt(Vector3.X);
+        weaponCamera.update();
 
         collisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfiguration);
@@ -76,7 +85,7 @@ public class GameWorld implements Disposable{
 
         minimap = new Minimap();
         minimapRenderables = new ArrayList<>();
-        minimapRenderables.add(playerObject);
+        minimapRenderables.add(playerObject.getMinimapModelProvider());
 
         gameMap = new GameMap(31, 28);
         gameMap.generate();
@@ -97,6 +106,9 @@ public class GameWorld implements Disposable{
 
     public void resize(int width, int height){
         minimap.resize(width, height);
+        weaponCamera.viewportWidth = width;
+        weaponCamera.viewportHeight = height;
+        weaponCamera.update(true);
     }
 
     public void update(float deltaTime) {
@@ -113,14 +125,18 @@ public class GameWorld implements Disposable{
         for (ModelInstance model : gameMap.getModelInstances()){
             modelBatch.render(model); //Fixme: add environment
         }
-        for (ModelInstance model : playerObject.getModelInstances()){
-            modelBatch.render(model, environment);
-        }
         modelBatch.end();
 
         debugDrawer.begin(playerCamera);
         collisionWorld.debugDrawWorld();
         debugDrawer.end();
+
+        Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
+        modelBatch.begin(weaponCamera);
+        for (ModelInstance model : playerObject.getModelInstances()){
+            modelBatch.render(model, environment);
+        }
+        modelBatch.end();
 
         minimap.render(modelBatch, minimapRenderables);
     }

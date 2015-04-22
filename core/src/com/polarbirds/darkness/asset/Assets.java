@@ -18,7 +18,7 @@ public class Assets {
 
     public static final class model {
         //public static final String player = "";
-        public static final String weapon_teslaGun = "3d/weapons/teslagun.g3db";
+        public static final String weapon_teslaGun = "3d/weapons/Tesla rifle.g3db";
         public static final String debugEnemy = "3d/enemies/testEnemy.g3db";
 
         //Map

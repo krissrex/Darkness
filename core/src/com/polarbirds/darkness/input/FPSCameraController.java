@@ -22,7 +22,13 @@ public class FPSCameraController extends InputAdapter {
     protected int STRAFE_RIGHT = Input.Keys.D;
     protected int FORWARD = Input.Keys.W;
     protected int BACKWARD = Input.Keys.S;
+    protected int SPRINT = Input.Keys.SHIFT_LEFT;
+
     public float velocity = 5;
+    public float sprintVelocity = 10;
+    protected float currentVelocity = 0;
+    protected boolean walking = false;
+
     public float degreesPerPixel = 0.3f;
 
     protected float yAxisDegrees = 0;
@@ -61,32 +67,45 @@ public class FPSCameraController extends InputAdapter {
             cameraMoved(deltaX, deltaY);
         }
 
+        walking = false;
         tmp.set(0f,0f,0f);
         if (keys.containsKey(FORWARD)) {
             tmp2.set(camera.direction).y=0;
             tmp2.nor();
             tmp.add(tmp2);
+            walking = true;
         }
         if (keys.containsKey(BACKWARD)) {
             tmp2.set(camera.direction).y=0;
             tmp2.nor();
             tmp.sub(tmp2);
+            walking = true;
         }
         if (keys.containsKey(STRAFE_LEFT)) {
             tmp2.set(camera.direction).crs(camera.up).y=0;
             tmp2.nor();
             tmp.sub(tmp2);
+            walking = true;
         }
         if (keys.containsKey(STRAFE_RIGHT)) {
             tmp2.set(camera.direction).crs(camera.up).y=0;
             tmp2.nor();
             tmp.add(tmp2);
+            walking = true;
         }
 
-        tmp.nor().scl(deltaTime*velocity);
+        if (walking){
+            currentVelocity = velocity;
+            if (keys.containsKey(SPRINT)){
+                currentVelocity *= 10;
+            }
+        }
+
+        tmp.nor().scl(deltaTime * currentVelocity);
         camera.position.add(tmp);
         camera.update();
     }
+
 
     @Override
     public boolean keyDown(int keycode) {
