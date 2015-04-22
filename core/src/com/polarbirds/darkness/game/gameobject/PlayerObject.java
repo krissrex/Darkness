@@ -1,4 +1,4 @@
-package com.polarbirds.darkness.gameobject;
+package com.polarbirds.darkness.game.gameobject;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.polarbirds.darkness.DarknessGame;
-import com.polarbirds.darkness.GameWorld;
 import com.polarbirds.darkness.asset.Assets;
+import com.polarbirds.darkness.game.GameWorld;
 
 /**
  * Created by Kristian Rekstad on 05.03.2015.
@@ -30,14 +30,19 @@ public class PlayerObject extends GameObject {
         //camera.direction.set(0f, 0f, -1f);
 
         transform = new Matrix4(new Vector3(0f, 1f, 0f), new Quaternion(), new Vector3(1f, 1f, 1f));
+        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_I, Model.class));
 
         collisionObject = new btCollisionObject();
-        collisionObject.setWorldTransform(transform);
+        //collisionObject.setWorldTransform(transform);
 
-        btCollisionShape collisionShape = new btBoxShape(new Vector3(0.5f, 1f, 0.5f));
+        //btCollisionShape collisionShape = new btBoxShape(new Vector3(0.5f, 1f, 0.5f));
+
+        btCollisionShape collisionShape = Bullet.obtainStaticNodeShape(playerModel.nodes);
+        //btKinematicCharacterController ctrl = new btKinematicCharacterController(null, null, 0.5f);
+
         collisionObject.setCollisionShape(collisionShape);
-
-        playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_T, Model.class));
+        //Quaternion rot = new Quaternion(Vector3.Y, 90f);
+        //collisionObject.setWorldTransform(new Matrix4(Vector3.Zero, rot, new Vector3(1f,1f,1f)));
 
     }
 
@@ -64,7 +69,7 @@ public class PlayerObject extends GameObject {
         //dt += deltaTime;
         //if (dt>=6.28){dt=0;}
 
-        collisionObject.setWorldTransform(transform);
+        //collisionObject.setWorldTransform(transform);
     }
 
     @Override

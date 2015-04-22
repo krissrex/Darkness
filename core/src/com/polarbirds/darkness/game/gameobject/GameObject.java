@@ -1,8 +1,8 @@
-package com.polarbirds.darkness.gameobject;
+package com.polarbirds.darkness.game.gameobject;
 
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.utils.Disposable;
-import com.polarbirds.darkness.GameWorld;
+import com.polarbirds.darkness.game.GameWorld;
 import com.polarbirds.darkness.graphics.RenderableObject;
 
 /**

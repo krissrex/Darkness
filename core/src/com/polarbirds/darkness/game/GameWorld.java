@@ -1,9 +1,8 @@
-package com.polarbirds.darkness;
+package com.polarbirds.darkness.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -11,13 +10,12 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Disposable;
-import com.polarbirds.darkness.gameobject.PlayerObject;
+import com.polarbirds.darkness.game.gameobject.PlayerObject;
 import com.polarbirds.darkness.screen.GameScreen;
 
 /**
@@ -104,7 +102,7 @@ public class GameWorld implements Disposable{
         playerObject.update(deltaTime);
         collisionWorld.performDiscreteCollisionDetection();
 
-        playerCamera.update(true);
+        //playerCamera.update(true);
 
         updateMapCamera();
     }
