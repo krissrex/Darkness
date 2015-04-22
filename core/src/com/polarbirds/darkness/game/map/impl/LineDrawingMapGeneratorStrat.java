@@ -141,7 +141,7 @@ public class LineDrawingMapGeneratorStrat implements MapGeneratorStrategy{
     }
 
 
-    public void makePath(Grid<Boolean> grid, IntPoint2 start, IntPoint2 stop){
+    private void makePath(Grid<Boolean> grid, IntPoint2 start, IntPoint2 stop){
         int dx = stop.x - start.x;
         int dy = stop.y - start.y;
 
