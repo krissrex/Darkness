@@ -13,9 +13,11 @@ import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Disposable;
 import com.polarbirds.darkness.game.gameobject.PlayerObject;
+import com.polarbirds.darkness.game.map.GameMap;
 import com.polarbirds.darkness.game.map.Minimap;
 import com.polarbirds.darkness.graphics.ModelInstanceProvider;
 import com.polarbirds.darkness.screen.GameScreen;
+import com.polarbirds.darkness.util.geom.IntPoint2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class GameWorld implements Disposable{
     // Entities
     PlayerObject playerObject;
     private List<ModelInstanceProvider> minimapRenderables;
+    GameMap gameMap;
 
 
 
@@ -73,6 +76,16 @@ public class GameWorld implements Disposable{
         minimap = new Minimap();
         minimapRenderables = new ArrayList<>();
         minimapRenderables.add(playerObject);
+
+        gameMap = new GameMap(31, 28);
+        gameMap.generate();
+        minimapRenderables.add(gameMap);
+
+
+        IntPoint2 start = gameMap.getStart();
+        playerCamera.position.x = start.x;
+        playerCamera.position.z = start.y;
+        playerCamera.update();
     }
 
 
@@ -86,12 +99,15 @@ public class GameWorld implements Disposable{
         playerObject.update(deltaTime);
         collisionWorld.performDiscreteCollisionDetection();
 
-       minimap.update(playerCamera.position, playerCamera.direction);
+        minimap.update(playerCamera.position, playerCamera.direction);
     }
 
     public void render(){
 
         modelBatch.begin(playerCamera);
+        for (ModelInstance model : gameMap.getModelInstances()){
+            modelBatch.render(model);
+        }
         for (ModelInstance model : playerObject.getModelInstances()){
             modelBatch.render(model, environment);
         }

@@ -52,7 +52,9 @@ public class GameMap implements ModelInstanceProvider {
         mGenerator.generate();
         createInstances();
         mStart.set(mGenerator.getMapBlocks().startPoint);
+        mStart.scale(10);
         mEnd.set(mGenerator.getMapBlocks().endPoint);
+        mEnd.scale(10);
     }
 
     private void createInstances(){
@@ -61,7 +63,7 @@ public class GameMap implements ModelInstanceProvider {
         for (MapBlock block : result.blocks){
             ModelInstance instance = new ModelInstance(getModelFromType(block.type));
             instance.transform.rotate(Vector3.Y, block.rotation);
-            instance.transform.translate(block.position.x, 0, block.position.y);
+            instance.transform.translate(block.position.x*10, 0, block.position.y*10);
             instance.calculateTransforms();
             mModelInstances.add(instance);
         }
