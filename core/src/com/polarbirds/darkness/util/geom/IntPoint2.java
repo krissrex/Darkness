@@ -27,4 +27,13 @@ public class IntPoint2 {
                 ", y=" + y +
                 '}';
     }
+
+    /**
+     * Sets this point to be equal to the other
+     * @param other the point to copy values from
+     */
+    public void set(IntPoint2 other){
+        this.x = other.x;
+        this.y = other.y;
+    }
 }
