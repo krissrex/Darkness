@@ -2,7 +2,6 @@ package com.polarbirds.darkness.game.gameobject;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -31,6 +30,7 @@ public class PlayerObject extends GameObject {
 
         transform = new Matrix4(new Vector3(0f, 1f, 0f), new Quaternion(), new Vector3(1f, 1f, 1f));
         playerModel = new ModelInstance(DarknessGame.ASSET_MANAGER.get(Assets.model.map_I, Model.class));
+        mModels.add(playerModel);
 
         collisionObject = new btCollisionObject();
         //collisionObject.setWorldTransform(transform);
@@ -72,8 +72,4 @@ public class PlayerObject extends GameObject {
         //collisionObject.setWorldTransform(transform);
     }
 
-    @Override
-    public void render(ModelBatch batch) {
-        batch.render(playerModel, world.getPlayerEnvironment()); //, world.getPlayerEnvironment());
-    }
 }
