@@ -36,4 +36,9 @@ public class IntPoint2 {
         this.x = other.x;
         this.y = other.y;
     }
+
+    public void scale(int factor){
+        x *= factor;
+        y *= factor;
+    }
 }
