@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -31,7 +30,6 @@ public class LoadingScreen implements Screen{
     Stage stage;
     TextButton continueButton;
     TextField loadingText;
-    Skin skin;
 
     public LoadingScreen(DarknessGame game){
         this.game = game;
@@ -48,15 +46,13 @@ public class LoadingScreen implements Screen{
 
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        Table table = new Table(skin);
+        Table table = new Table();
         table.setFillParent(true);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = font;
         style.fontColor = Color.WHITE;
-        continueButton = new TextButton("Continue", skin);
+        continueButton = new TextButton("Continue", style);
         continueButton.setStyle(style);
         continueButton.setVisible(loaded);
         continueButton.setPosition(0, Gdx.graphics.getHeight()/2, Align.center);
@@ -146,7 +142,6 @@ public class LoadingScreen implements Screen{
     public void hide() {
         DarknessGame.INPUT_MULTIPLEXER.removeProcessor(stage);
         stage.dispose();
-        skin.dispose();
     }
 
     @Override
