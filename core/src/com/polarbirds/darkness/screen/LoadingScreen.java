@@ -3,7 +3,9 @@ package com.polarbirds.darkness.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.polarbirds.darkness.DarknessGame;
 import com.polarbirds.darkness.Debug;
+import com.polarbirds.darkness.asset.Assets;
 
 /**
  * Created by Kristian Rekstad on 05.03.2015.
@@ -30,6 +33,9 @@ public class LoadingScreen implements Screen{
     Stage stage;
     TextButton continueButton;
     TextField loadingText;
+    Texture background;
+
+    SpriteBatch spriteBatch;
 
     public LoadingScreen(DarknessGame game){
         this.game = game;
@@ -43,6 +49,9 @@ public class LoadingScreen implements Screen{
         nextScreen = false;
 
         stage = new Stage();
+
+        background = DarknessGame.ASSET_MANAGER.get(Assets.texture.background);
+        spriteBatch = new SpriteBatch();
 
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(stage);
 
@@ -84,6 +93,10 @@ public class LoadingScreen implements Screen{
             game.setScreen(game.gameScreen);
             return;
         }
+
+        spriteBatch.begin();
+        spriteBatch.draw(background, 0f, 0f);
+        spriteBatch.end();
 
         loaded = DarknessGame.ASSET_MANAGER.update(); // Load assets
 
@@ -142,6 +155,8 @@ public class LoadingScreen implements Screen{
     public void hide() {
         DarknessGame.INPUT_MULTIPLEXER.removeProcessor(stage);
         stage.dispose();
+        background.dispose();
+        spriteBatch.dispose();
     }
 
     @Override

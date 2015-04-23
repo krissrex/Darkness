@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -33,7 +34,8 @@ public class DarknessGame extends Game {
         Bullet.init(false, true); // Init Bullet without refcount, and with logging
 
         Gdx.input.setInputProcessor(INPUT_MULTIPLEXER); // Set input handlers.
-
+        ASSET_MANAGER.load(Assets.texture.background, Texture.class);
+        ASSET_MANAGER.finishLoadingAsset(Assets.texture.background);
         queueAssets(); // Load assets
 
         if (loadingScreen==null) loadingScreen = new LoadingScreen(this);

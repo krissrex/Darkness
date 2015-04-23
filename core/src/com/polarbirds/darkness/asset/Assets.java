@@ -13,7 +13,7 @@ public class Assets {
     private Assets(){}
 
     public static final class texture {
-        public static final String badlogic = "badlogic.jpg";
+        public static final String background = "img/background.png";
     }
 
     public static final class model {
@@ -31,6 +31,13 @@ public class Assets {
 
 
         // Util
+
+        /**
+         * Uses the supplied {@link AssetManager} to load: weapon_teslaGun, debugEnemy,
+         map_I, map_L, map_T, map_X,
+         map_room.
+         * @param manager
+         */
         public final static void loadAll(AssetManager manager) {
             List<String> all = Arrays.asList(weapon_teslaGun, debugEnemy,
                     map_I, map_L, map_T, map_X,
