@@ -3,9 +3,11 @@ package com.polarbirds.darkness.game.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.polarbirds.darkness.graphics.ModelInstanceProvider;
@@ -19,6 +21,9 @@ public class Minimap {
 
     private final OrthographicCamera overviewCamera;
     private int overviewX, overviewY, overviewSize;
+    private ShapeRenderer mShapeRenderer;
+    /** Stretching the screen skews stuff. Store the max to always render full map background*/
+    private int mMaxScreenDimension;
 
     public Minimap(){
         overviewCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -29,6 +34,9 @@ public class Minimap {
         overviewCamera.viewportHeight = 100;
         overviewCamera.zoom = 0.3f;
         overviewCamera.update();
+
+        mShapeRenderer = new ShapeRenderer();
+        mMaxScreenDimension = Math.max(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())*3; //just make sure it is big....
     }
 
 
@@ -43,6 +51,7 @@ public class Minimap {
     }
 
     public void resize(int width, int height){
+        mMaxScreenDimension = Math.max(width, height)*3; // just make sure it is big...
         setOverviewPosition(width, height);
     }
 
@@ -91,21 +100,34 @@ public class Minimap {
     }
 
 
+    private final Vector3 tempVec = new Vector3();
     /**
      * The batch should not have called {@link ModelBatch#begin(Camera)} already.
      * @param batch
      * @param mapRenderables the renderables that compose the map
      */
-    public void render(ModelBatch batch, List<ModelInstanceProvider> mapRenderables){
+    public void render(ModelBatch batch, List<ModelInstanceProvider> mapRenderables) {
         Gdx.gl.glViewport(overviewX, overviewY, overviewSize, overviewSize);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        mShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        mShapeRenderer.setColor(1f, 1f, 1f, 0.1f);
+        mShapeRenderer.rect(0, 0, mMaxScreenDimension, mMaxScreenDimension);
+        mShapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
         batch.begin(overviewCamera);
         for (ModelInstanceProvider provider : mapRenderables){
             for (ModelInstance model : provider.getModelInstances()){
-                batch.render(model);
+                model.transform.getTranslation(tempVec);
+                if (overviewCamera.frustum.sphereInFrustum(tempVec, 10f))
+                    batch.render(model);
             }
         }
         batch.end();
+
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
     }
 
 }

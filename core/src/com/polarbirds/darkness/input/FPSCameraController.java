@@ -1,5 +1,6 @@
 package com.polarbirds.darkness.input;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.polarbirds.darkness.util.Callback;
 
 /**
  * Created by Kristian Rekstad on 07.03.2015.
@@ -17,12 +19,14 @@ public class FPSCameraController extends InputAdapter {
 
     protected final Camera camera;
     protected final IntIntMap keys = new IntIntMap();
-    protected int TOGGLE_CURSOR_LOCK = Input.Keys.L;
+    protected int TOGGLE_CURSOR_LOCK = Input.Keys.ESCAPE;
     protected int STRAFE_LEFT = Input.Keys.A;
     protected int STRAFE_RIGHT = Input.Keys.D;
     protected int FORWARD = Input.Keys.W;
     protected int BACKWARD = Input.Keys.S;
     protected int SPRINT = Input.Keys.SHIFT_LEFT;
+
+    protected boolean mLeftClicked = false;
 
     public float velocity = 5;
     public float sprintVelocity = 10;
@@ -38,7 +42,6 @@ public class FPSCameraController extends InputAdapter {
 
     protected final Vector3 tmp = new Vector3();
     protected final Vector3 tmp2 = new Vector3();
-    protected final Quaternion yAxisRotation = new Quaternion();
     protected final Quaternion rightAxisRotation = new Quaternion();
 
     protected boolean cursorLock = true;
@@ -46,10 +49,21 @@ public class FPSCameraController extends InputAdapter {
     int cursorX;
     int cursorY;
 
+    protected Callback playerFiredCallback;
+
     public FPSCameraController(Camera camera) {
         this.camera = camera;
         resized(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.input.setCursorCatched(cursorLock);
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            setCursorLock(false);
+        } else {
+            setCursorLock(true);
+        }
+    }
+
+    public void setPlayerFireCallback(Callback callback){
+        playerFiredCallback = callback;
     }
 
     public void resized(int width, int height){
@@ -97,21 +111,35 @@ public class FPSCameraController extends InputAdapter {
         if (walking){
             currentVelocity = velocity;
             if (keys.containsKey(SPRINT)){
-                currentVelocity *= 10;
+                currentVelocity = sprintVelocity;
             }
         }
 
         tmp.nor().scl(deltaTime * currentVelocity);
         camera.position.add(tmp);
         camera.update();
+
+        if (mLeftClicked){
+            mLeftClicked = false;
+            if (playerFiredCallback != null){
+                playerFiredCallback.onCallback("fired");
+            }
+        }
     }
 
+    public void setCursorLock(boolean locked){
+        cursorLock = locked;
+        Gdx.input.setCursorCatched(cursorLock);
+    }
+
+    public void toggleCursorLock(){
+        setCursorLock(!cursorLock);
+    }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == TOGGLE_CURSOR_LOCK){
-            cursorLock = !cursorLock;
-            Gdx.input.setCursorCatched(cursorLock);
+            toggleCursorLock();
         }
 
         keys.put(keycode, keycode);
@@ -126,6 +154,9 @@ public class FPSCameraController extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT){
+            mLeftClicked = true;
+        }
         return super.touchDown(screenX, screenY, pointer, button);
     }
 

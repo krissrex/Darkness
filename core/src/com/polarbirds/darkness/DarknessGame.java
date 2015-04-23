@@ -4,8 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -20,7 +20,7 @@ public class DarknessGame extends Game {
     public final static AssetManager ASSET_MANAGER = new AssetManager();
     public final static InputMultiplexer INPUT_MULTIPLEXER = new InputMultiplexer();
 
-    Texture img;
+    private Music mBackgroundMusic;
 
     public GameScreen gameScreen;
     public LoadingScreen loadingScreen;
@@ -39,6 +39,9 @@ public class DarknessGame extends Game {
         if (loadingScreen==null) loadingScreen = new LoadingScreen(this);
         if (gameScreen==null) gameScreen = new GameScreen(this);
 
+        mBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/ambient.mp3"));
+        mBackgroundMusic.setLooping(true);
+        mBackgroundMusic.play();
         setScreen(loadingScreen);
 
 
@@ -66,6 +69,9 @@ public class DarknessGame extends Game {
         modelBatch.dispose();
         if (loadingScreen != null) {loadingScreen.dispose(); loadingScreen=null;}
         if (gameScreen != null) {gameScreen.dispose(); gameScreen=null;}
+        mBackgroundMusic.stop();
+        mBackgroundMusic.dispose();
+
     }
 
 

@@ -3,6 +3,11 @@ package com.polarbirds.darkness.game.map;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btCompoundShape;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import com.badlogic.gdx.utils.Disposable;
 import com.polarbirds.darkness.DarknessGame;
 import com.polarbirds.darkness.Debug;
 import com.polarbirds.darkness.asset.Assets;
@@ -16,7 +21,7 @@ import java.util.List;
 /**
  * Created by Kristian Rekstad on 22.04.2015.
  */
-public class GameMap implements ModelInstanceProvider {
+public class GameMap implements ModelInstanceProvider, Disposable {
 
     private final MapGenerator mGenerator;
     private LineDrawingMapGeneratorStrat mStrat;
@@ -25,6 +30,9 @@ public class GameMap implements ModelInstanceProvider {
     private List<ModelInstance> mModelInstances;
     private IntPoint2 mStart;
     private IntPoint2 mEnd;
+
+    private btCollisionShape mCollisionShape;
+    private btRigidBody mRigidBody;
 
     /**
      * @see LineDrawingMapGeneratorStrat#generate(int, int)
@@ -138,5 +146,40 @@ public class GameMap implements ModelInstanceProvider {
     @Override
     public List<ModelInstance> getModelInstances() {
         return mModelInstances;
+    }
+
+
+    // physics stuff
+
+    public void createPhysicsStuff(){
+
+        if (mCollisionShape != null){
+            mCollisionShape.dispose();
+            mCollisionShape = null;
+        }
+
+        btCompoundShape shape = new btCompoundShape();
+        for(ModelInstance instance : mModelInstances){
+            shape.addChildShape(instance.transform, Bullet.obtainStaticNodeShape(instance.nodes));
+        }
+
+        mCollisionShape = shape;
+
+        if (mRigidBody != null){
+            mRigidBody.dispose();
+            mRigidBody = null;
+        }
+
+        mRigidBody = new btRigidBody(0f, null, mCollisionShape);
+    }
+
+    public btRigidBody getRigidBody(){
+        return mRigidBody;
+    }
+
+    @Override
+    public void dispose() {
+        if (mCollisionShape != null) mCollisionShape.dispose();
+        if (mRigidBody != null) mRigidBody.dispose();
     }
 }

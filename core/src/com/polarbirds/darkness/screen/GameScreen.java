@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.polarbirds.darkness.DarknessGame;
+import com.polarbirds.darkness.Debug;
 import com.polarbirds.darkness.game.GameWorld;
-import com.polarbirds.darkness.input.FPSCameraController;
 
 /**
  * Created by Kristian Rekstad on 04.03.2015.
@@ -16,7 +16,6 @@ public class GameScreen implements Screen {
 
     public DarknessGame game;
     GameWorld world;
-    public FPSCameraController cameraController; //FirstPersonCameraController cameraController;
     public PerspectiveCamera playerCamera;
     private ShapeRenderer shapeRenderer;
 
@@ -35,8 +34,6 @@ public class GameScreen implements Screen {
         playerCamera.update(true);
 
         if (world == null) world = new GameWorld(this);
-        cameraController = new FPSCameraController(playerCamera);
-        DarknessGame.INPUT_MULTIPLEXER.addProcessor(cameraController);
 
         shapeRenderer = new ShapeRenderer();
     }
@@ -45,18 +42,18 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        cameraController.update(delta);
-
         world.update(delta);
         world.render();
 
 
-        shapeRenderer.setProjectionMatrix(playerCamera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.line(0f, 0, 0, 100, 0, 0, Color.RED, Color.RED);
-            shapeRenderer.line(0f, 0f, 0, 0f, 100f, 0, Color.GREEN, Color.GREEN);
-            shapeRenderer.line(0f, 0f, 0f, 0f, 0f, 100f, Color.BLUE, Color.BLUE);
-        shapeRenderer.end();
+        if (Debug.DEBUG){
+            shapeRenderer.setProjectionMatrix(playerCamera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.line(0f, 0, 0, 100, 0, 0, Color.RED, Color.RED);
+                shapeRenderer.line(0f, 0f, 0, 0f, 100f, 0, Color.GREEN, Color.GREEN);
+                shapeRenderer.line(0f, 0f, 0f, 0f, 0f, 100f, Color.BLUE, Color.BLUE);
+            shapeRenderer.end();
+        }
 
     }
 
@@ -66,7 +63,6 @@ public class GameScreen implements Screen {
         playerCamera.viewportHeight = height;
         playerCamera.update(true);
 
-        cameraController.resized(width, height);
         world.resize(width, height);
     }
 
@@ -82,7 +78,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        DarknessGame.INPUT_MULTIPLEXER.removeProcessor(cameraController);
     }
 
     @Override
