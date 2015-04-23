@@ -24,7 +24,7 @@ public class WeaponRenderer {
     public WeaponRenderer(ModelBatch batch) {
         mBatch = batch;
         mWeaponEnvironment = new Environment();
-        mWeaponEnvironment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.6f, 0.6f, 0.6f, 1f));
+        mWeaponEnvironment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.5f, 0.5f, 0.5f, 1f));
 
         mLight = new PointLight();
         mLight.set(Color.WHITE, new Vector3(2f, 0f, 0.4f), 0.5f);
@@ -39,9 +39,9 @@ public class WeaponRenderer {
 
     public void setLight(boolean on){
         if (on){
-            mLight.intensity = 0.5f;
+            mLight.intensity = 2f;
         } else {
-            mLight.intensity = 3f;
+            mLight.intensity = 0.7f;
         }
     }
 
