@@ -25,7 +25,7 @@ public class Assets {
         public static final String map_I = "3d/map/I/Tunnel I -y y.g3db";
         public static final String map_L = "3d/map/L/Tunnel L -y x.g3db";
         public static final String map_T = "3d/map/T/Tunnel T x -y y.g3db";
-        public static final String map_X = "3d/map/X/Tunnel X -y y -x.g3db";
+        public static final String map_X = "3d/map/X/Tunnel X -y y -x x.g3db";
 
         public static final String map_room = "3d/map/Room_start/Room 5y 5-y 5-x 4x open x.g3db";
 
