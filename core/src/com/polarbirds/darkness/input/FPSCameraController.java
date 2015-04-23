@@ -43,6 +43,8 @@ public class FPSCameraController extends InputAdapter {
     protected float xAxisDegrees = 0;
 
     protected float headBob = 0;
+    protected float cameraHeight = 1.8f;
+    protected float cameraHeightOffset = 0f;
 
     protected final Vector3 tmp = new Vector3();
     protected final Vector3 tmp2 = new Vector3();
@@ -78,6 +80,7 @@ public class FPSCameraController extends InputAdapter {
     private int deltaX, deltaY;
 
     public void update(float deltaTime){
+
         if (cursorLock){
             deltaX = Gdx.input.getDeltaX();
             deltaY = Gdx.input.getDeltaY();
@@ -114,11 +117,25 @@ public class FPSCameraController extends InputAdapter {
 
         if (walking){
             currentVelocity = velocity;
+            float sprintBob = 1f;
             if (keys.containsKey(SPRINT)){
                 currentVelocity = sprintVelocity;
+                headBob += deltaTime*16f;
+                sprintBob = 0.8f;
+            } else {
+                headBob += deltaTime*13f;
+            }
+            cameraHeightOffset = (float)Math.sin(headBob)*0.05f*sprintBob;
+
+        } else {
+            headBob = 0f;
+            cameraHeightOffset *= 30f*deltaTime;
+            if (Math.abs(cameraHeightOffset) <= 0.0001){
+                cameraHeightOffset = 0f;
             }
         }
 
+        camera.position.y = cameraHeight+cameraHeightOffset;
         tmp.nor().scl(deltaTime * currentVelocity);
         camera.position.add(tmp);
         camera.update();
