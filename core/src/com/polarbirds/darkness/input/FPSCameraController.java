@@ -17,6 +17,9 @@ import com.polarbirds.darkness.util.Callback;
  */
 public class FPSCameraController extends InputAdapter {
 
+    public static final String CALLBACK_FIRE = "fpsFire";
+    public static final String CALLBACK_LIGHT = "fpsLigh";
+
     protected final Camera camera;
     protected final IntIntMap keys = new IntIntMap();
     protected int TOGGLE_CURSOR_LOCK = Input.Keys.ESCAPE;
@@ -27,6 +30,7 @@ public class FPSCameraController extends InputAdapter {
     protected int SPRINT = Input.Keys.SHIFT_LEFT;
 
     protected boolean mLeftClicked = false;
+    protected boolean mRightClicked = false;
 
     public float velocity = 5;
     public float sprintVelocity = 10;
@@ -122,7 +126,13 @@ public class FPSCameraController extends InputAdapter {
         if (mLeftClicked){
             mLeftClicked = false;
             if (playerFiredCallback != null){
-                playerFiredCallback.onCallback("fired");
+                playerFiredCallback.onCallback(CALLBACK_FIRE);
+            }
+        }
+        if (mRightClicked){
+            mRightClicked = false;
+            if (playerFiredCallback != null){
+                playerFiredCallback.onCallback(CALLBACK_LIGHT);
             }
         }
     }
@@ -156,6 +166,8 @@ public class FPSCameraController extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT){
             mLeftClicked = true;
+        } else if (button == Input.Buttons.RIGHT){
+            mRightClicked = true;
         }
         return super.touchDown(screenX, screenY, pointer, button);
     }

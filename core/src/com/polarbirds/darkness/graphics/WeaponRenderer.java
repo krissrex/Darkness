@@ -39,9 +39,9 @@ public class WeaponRenderer {
 
     public void setLight(boolean on){
         if (on){
-            mLight.intensity = 2f;
+            mLight.intensity = 1.4f;
         } else {
-            mLight.intensity = 0.7f;
+            mLight.intensity = 0.3f;
         }
     }
 

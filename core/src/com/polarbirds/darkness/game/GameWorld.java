@@ -1,6 +1,7 @@
 package com.polarbirds.darkness.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +31,7 @@ import com.polarbirds.darkness.graphics.ModelInstanceProvider;
 import com.polarbirds.darkness.graphics.WeaponRenderer;
 import com.polarbirds.darkness.input.FPSCameraController;
 import com.polarbirds.darkness.screen.GameScreen;
+import com.polarbirds.darkness.util.Callback;
 import com.polarbirds.darkness.util.geom.IntPoint2;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ import java.util.List;
 /**
  * Created by Kristian Rekstad on 05.03.2015.
  */
-public class GameWorld implements Disposable{
+public class GameWorld implements Disposable, Callback{
 
     // Rendering
     GameScreen game;
@@ -51,6 +53,9 @@ public class GameWorld implements Disposable{
     private Minimap mMinimap;
     private WeaponRenderer mWeaponRenderer;
     PointLight gunLight;
+    private final ColorAttribute mHighAmbient;
+    private final ColorAttribute mLowAmbient;
+
 
     // Collision
     btDiscreteDynamicsWorld collisionWorld;
@@ -65,9 +70,14 @@ public class GameWorld implements Disposable{
     private List<ModelInstanceProvider> minimapRenderables;
     GameMap gameMap;
 
+    // Audio
+    private Sound mWeaponSpark;
+
     //Stuff
     private Vector3 tmpVec1 = new Vector3();
     private Vector3 tmpVec2 = new Vector3();
+
+    private float lightTime = 0f;
 
 
     public GameWorld(GameScreen game){
@@ -77,9 +87,13 @@ public class GameWorld implements Disposable{
         this.playerCamera = game.playerCamera;
 
 
+        // Audio
+        mWeaponSpark = Gdx.audio.newSound(Gdx.files.internal("sound/weapon_fizz.mp3"));
+
         // Camera controller
         cameraController = new FPSCameraController(playerCamera);
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(cameraController);
+        cameraController.setPlayerFireCallback(this);
 
         // Physics world
         collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -124,7 +138,9 @@ public class GameWorld implements Disposable{
         gunLight = new PointLight().set(Color.YELLOW, tmpVec1, 0.f);
 
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        mLowAmbient = new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f);
+        mHighAmbient = new ColorAttribute(ColorAttribute.AmbientLight, 0.8f, 0.8f, 0.8f, 1f);
+        environment.set(mLowAmbient);
         environment.set(new ColorAttribute(ColorAttribute.Fog, 0f, 0f, 0f, 1f));
         environment.add(gunLight);
 
@@ -141,6 +157,9 @@ public class GameWorld implements Disposable{
         mWeaponRenderer.resize(width, height);
     }
 
+    /**
+     * @param deltaTime the time in seconds since last update
+     */
     public void update(float deltaTime) {
         cameraController.update(deltaTime);
         playerObject.update(deltaTime);
@@ -148,10 +167,16 @@ public class GameWorld implements Disposable{
         collisionWorld.performDiscreteCollisionDetection();
 
         updateLightPosition();
-        if (Gdx.input.justTouched()){
-            System.out.println("touched");
+        if (lightTime > 0.000001f){
             gunLight.intensity = 2f;
             mWeaponRenderer.setLight(true);
+            environment.set(mHighAmbient);
+            lightTime -= deltaTime;
+        } else {
+            gunLight.intensity = 0f;
+            mWeaponRenderer.setLight(false);
+            environment.set(mLowAmbient);
+            lightTime = 0f;
         }
 
         mMinimap.update(playerCamera.position, playerCamera.direction);
@@ -211,5 +236,15 @@ public class GameWorld implements Disposable{
     /** Allows the environment to change. */
     public Environment getPlayerEnvironment(){
         return environment;
+    }
+
+    @Override
+    public void onCallback(String event) {
+        if (event.equals(FPSCameraController.CALLBACK_FIRE)){
+            //TODO: fire weapon lolz
+        } else if (event.equals(FPSCameraController.CALLBACK_LIGHT)){
+            lightTime = 0.2f;
+            mWeaponSpark.play(0.6f);
+        }
     }
 }

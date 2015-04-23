@@ -53,7 +53,6 @@ public class PlayerObject extends GameObject {
         //btKinematicCharacterController ctrl = new btKinematicCharacterController(null, null, 0.5f);
 
         collisionObject.setCollisionShape(collisionShape);
-        //Quaternion rot = new Quaternion(Vector3.Y, 90f);
         //collisionObject.setWorldTransform(new Matrix4(Vector3.Zero, rot, new Vector3(1f,1f,1f)));
 
         ModelBuilder builder = new ModelBuilder();
