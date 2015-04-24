@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.polarbirds.darkness.DarknessGame;
 import com.polarbirds.darkness.Debug;
@@ -32,10 +32,13 @@ public class LoadingScreen implements Screen{
     BitmapFont font;
     Stage stage;
     TextButton continueButton;
-    TextField loadingText;
+    Label loadingText;
+    Label motdText;
     Texture background;
 
     SpriteBatch spriteBatch;
+
+    int w, h;
 
     public LoadingScreen(DarknessGame game){
         this.game = game;
@@ -50,13 +53,17 @@ public class LoadingScreen implements Screen{
 
         stage = new Stage();
 
-        background = DarknessGame.ASSET_MANAGER.get(Assets.texture.background);
+        background = DarknessGame.ASSET_MANAGER.get(Assets.texture.background, Texture.class);
         spriteBatch = new SpriteBatch();
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+
 
         DarknessGame.INPUT_MULTIPLEXER.addProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
+        table.setWidth(Gdx.graphics.getWidth());
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = font;
@@ -66,17 +73,21 @@ public class LoadingScreen implements Screen{
         continueButton.setVisible(loaded);
         continueButton.setPosition(0, Gdx.graphics.getHeight()/2, Align.center);
 
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = font;
-        textFieldStyle.fontColor = Color.WHITE;
-
-        loadingText = new TextField("Loading: 0", textFieldStyle);
+        loadingText = new Label("loading: 0", labelStyle);
         loadingText.setAlignment(Align.center);
+
+        motdText = new Label("\nNote: The game is not finished yet.\n" +
+                "Controlls are WASDJK, Shift, Esc, right mouse.\nPhysics, enemies and firing is not implemented.", labelStyle);
+
+        //motdText.setPosition(30, 100);
 
         table.add(loadingText).center();
         table.row();
         table.add(continueButton).center();
+        table.row();
+        table.add(motdText);
 
 
         stage.addActor(table);
@@ -95,7 +106,7 @@ public class LoadingScreen implements Screen{
         }
 
         spriteBatch.begin();
-        spriteBatch.draw(background, 0f, 0f);
+        spriteBatch.draw(background, 0f, 0f, w, h);
         spriteBatch.end();
 
         loaded = DarknessGame.ASSET_MANAGER.update(); // Load assets
@@ -139,6 +150,7 @@ public class LoadingScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+
     }
 
     @Override

@@ -35,7 +35,7 @@ public class DarknessGame extends Game {
 
         Gdx.input.setInputProcessor(INPUT_MULTIPLEXER); // Set input handlers.
         ASSET_MANAGER.load(Assets.texture.background, Texture.class);
-        ASSET_MANAGER.finishLoadingAsset(Assets.texture.background);
+        ASSET_MANAGER.finishLoading();
         queueAssets(); // Load assets
 
         if (loadingScreen==null) loadingScreen = new LoadingScreen(this);

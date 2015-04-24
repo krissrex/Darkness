@@ -118,7 +118,7 @@ public class GameWorld implements Disposable, Callback{
         minimapRenderables.add(playerObject.getMinimapModelProvider());
 
         // Game map
-        gameMap = new GameMap(31, 28);
+        gameMap = new GameMap(26, 28);
         gameMap.generate();
         minimapRenderables.add(gameMap);
         gameMap.createPhysicsStuff();
